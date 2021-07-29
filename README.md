@@ -3,10 +3,9 @@
 Melvor Mod Manager (M3) allows you to quickly add userscripts and browser extensions as mods to the Steam edition of Melvor Idle.
 
 ## Installation
-Download and run the setup .exe from the [Latest Release](https://github.com/ChaseStrackbein/melvor-mod-manager/releases/latest).
+Download and run the setup .exe from the [Latest Release](https://github.com/ChaseStrackbein/melvor-mod-manager/releases/latest). You will likely receive a warning that the publisher is unknown - I do not have a code signing certificate so make sure you only download [releases from GitHub](https://github.com/ChaseStrackbein/melvor-mod-manager/releases) or [compile the code yourself](https://github.com/ChaseStrackbein/melvor-mod-manager/#scripts-for-compilingrunning-m3-yourself).
 
 ## Use
-
 **!!! Only add scripts or extensions that you trust !!!**
 
 **And as always, backing up your save(s) is a good idea before using any new tool or mod.**
@@ -32,6 +31,8 @@ You can adjust the load order of the mods using the arrows on the right-hand sid
 ![Screenshot of M3](repo/app-screenshot.png)
 
 ## Scripts for Compiling/Running M3 Yourself
+Ensure you have [Node.js installed](https://nodejs.org/en/).
+
 Start a dev instance: `npm run electron:serve`
 
 Package into an executable: `npm run electron:build`
