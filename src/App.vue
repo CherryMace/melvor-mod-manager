@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-main class="blue-grey darken-3">
+    <v-main class="blue-grey darken-2">
       <div class="d-flex flex-column fill-height">
         <system-bar class="flex-grow-0 flex-shrink-0" />
         <v-container class="flex-column pa-0" fill-height fluid>

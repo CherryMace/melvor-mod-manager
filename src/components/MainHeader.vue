@@ -1,7 +1,7 @@
 <template>
-  <v-container fluid class="blue-grey darken-2 px-6 px-lg-0">
+  <v-container fluid class="blue-grey py-1 px-6 px-lg-0">
     <v-row class="align-center">
-      <v-col cols="12" sm="2" lg="1" class="text-center">
+      <v-col cols="12" sm="2" lg="1" class="d-flex align-center justify-center">
         <logo />
       </v-col>
 

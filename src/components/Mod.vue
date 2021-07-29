@@ -1,7 +1,7 @@
 <template>
-  <v-list-item :disabled="disabled" :value="mod.id">
-    <div class="mod pa-4 d-flex align-center">
-      <div class="load-order d-flex align-center mr-6">
+  <v-list-item :disabled="disabled" :value="mod.id" :class="isSelected ? 'lime accent-4' : 'blue-grey darken-4'">
+    <div class="mod pa-4 d-flex align-center blue-grey darken-1">
+      <div class="load-order d-flex align-center mr-3">
         <h3 class="text-h3 text--disabled">{{ loadOrder }}</h3>
       </div>
       <div>
@@ -38,6 +38,9 @@ export default {
       if ((/^https?:\/\/(www\.)?greasyfork\.org/).test(this.mod.origin))
         return 'Greasy Fork';
       return 'Unknown';
+    },
+    isSelected () {
+      return this.mod.id === this.$store.state.selectedMod;
     }
   }
 }

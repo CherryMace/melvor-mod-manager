@@ -1,14 +1,13 @@
 <template>
   <section>
     <div class="d-flex">
-      <v-menu offset-y right :value="addMenu" :rounded="false">
+      <v-menu offset-y right :value="addMenu">
         <template v-slot:activator="{ attrs, on }">
           <v-btn
             color="success"
             v-bind="attrs"
             v-on="on"
             depressed
-            tile
             :disabled="disabled"
             @click="addMenu = true"
           >
@@ -17,7 +16,7 @@
           </v-btn>
         </template>
 
-        <v-list color="blue-grey" :rounded="false">
+        <v-list color="blue-grey">
           <v-dialog
             v-model="fileDialog" 
             :overlay="false"

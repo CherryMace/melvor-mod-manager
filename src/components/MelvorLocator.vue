@@ -11,7 +11,7 @@
           </div>
         </v-col>
         <v-col cols="2" lg="1">
-          <v-btn block height="38" color="lighten-1" :class="result === 'success' ? 'blue-grey text--secondary' : 'primary'" :disabled="openingDirectory" tile depressed @click="promptDirectory">
+          <v-btn block height="38" color="lighten-1" class="squared-left-button" :class="result === 'success' ? 'blue-grey text--secondary' : 'primary'" :disabled="openingDirectory" depressed @click="promptDirectory">
             <span class="d-none d-sm-inline">Browse</span>
             <font-awesome-icon class="d-sm-none" :icon="['fas', 'search']"></font-awesome-icon>
           </v-btn>
@@ -58,11 +58,20 @@ export default {
 
 <style lang="scss">
 .squared-text-field {
-  border-radius: 0 !important;
-  background-color: #263238;
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+
+  .v-input__slot {
+    background-color: #263238 !important;
+  }
 }
 
 .ellipses input {
   text-overflow: ellipsis;
+}
+
+.squared-left-button {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
 }
 </style>

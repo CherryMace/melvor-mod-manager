@@ -53,11 +53,11 @@ export default new Vuex.Store({
   },
   actions: {
     async loadSavedState ({ dispatch }) {
+      const loadOrder = localStorage.getItem('modLoadOrder');
+      if (loadOrder) dispatch('loadModLoadOrder', JSON.parse(loadOrder));
+
       const dir = localStorage.getItem('melvorDir');
       if (dir) await dispatch('setDir', dir);
-
-      const loadOrder = localStorage.getItem('modLoadOrder');
-      if (loadOrder) await dispatch('loadModLoadOrder', JSON.parse(loadOrder));
     },
     async setDir ({ commit, dispatch }, dir) {
       const isValidDir = await api.file.validateMelvorDir(dir);
@@ -71,11 +71,8 @@ export default new Vuex.Store({
         await dispatch('setMods', []);
       }
     },
-    async loadModLoadOrder ({ state, commit, dispatch }, modLoadOrder) {
+    loadModLoadOrder ({ commit }, modLoadOrder) {
       commit('setModLoadOrder', modLoadOrder);
-      if (!state.mods.length) return;
-      const modsOrderedByLoadOrder = sortModsByLoadOrder(state.mods, modLoadOrder);
-      await dispatch('setMods', modsOrderedByLoadOrder);
     },
     saveModLoadOrder({ state, commit }) {
       const loadOrder = state.mods.map(mod => mod.id);

@@ -1,14 +1,14 @@
 <template>
-  <v-system-bar class="blue-grey darken-4 pa-0" window>
+  <v-system-bar class="blue-grey darken-1 pa-0" window>
     <div class="system-draggable-area"></div>
     <v-spacer />
-    <v-btn small tile depressed color="blue-grey darken-4" height="32" @click="minimize">
+    <v-btn small tile depressed color="blue-grey darken-1" height="32" @click="minimize">
       <font-awesome-icon :icon="['fas', 'window-minimize']"></font-awesome-icon>
     </v-btn>
-    <v-btn small tile depressed color="blue-grey darken-4" height="32" @click="maximize">
+    <v-btn small tile depressed color="blue-grey darken-1" height="32" @click="maximize">
       <font-awesome-icon :icon="['fas', 'window-maximize']"></font-awesome-icon>
     </v-btn>
-    <v-btn small tile depressed color="blue-grey darken-4" height="32" @click="close">
+    <v-btn small tile depressed color="blue-grey darken-1" height="32" @click="close">
       <font-awesome-icon :icon="['fas', 'times']"></font-awesome-icon>
     </v-btn>
   </v-system-bar>
@@ -39,6 +39,10 @@ export default {
   width: 100%;
   height: 100%;
   -webkit-app-region: drag;
+}
+
+.v-system-bar {
+  //background: linear-gradient(90deg, #263238 0%, #546E7A 100%);
 }
 
 .v-system-bar button {
