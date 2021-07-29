@@ -31,6 +31,11 @@ You can adjust the load order of the mods using the arrows on the right-hand sid
 ## Screenshot
 ![Screenshot of M3](repo/app-screenshot.png)
 
+## Scripts for Compiling/Running M3 Yourself
+Start a dev instance: `npm run electron:serve`
+
+Package into an executable: `npm run electron:build`
+
 ## License
 MIT
 
