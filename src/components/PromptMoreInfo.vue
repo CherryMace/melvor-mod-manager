@@ -1,12 +1,12 @@
 <template>
-  <v-card color="blue-grey darken-3">
+  <v-card color="blue-grey darken-1">
     <v-card-title>Add Mod</v-card-title>
     <v-card-text>
       <v-container fluid>
         <div>Provide a name for this mod:</div>
         <v-row class="mb-1" no-gutters>
           <v-col cols="12">
-            <v-text-field v-model="name" label="Name" ref="nameTextField" solo-inverted tile flat dense single-line hide-details @keydown.enter="confirm"></v-text-field>
+            <v-text-field v-model="name" label="Name" ref="nameTextField" solo-inverted flat dense single-line hide-details @keydown.enter="confirm"></v-text-field>
           </v-col>
         </v-row>
         <div v-show="error" class="red--text">{{ error }}</div>
@@ -15,7 +15,7 @@
     <v-card-actions>
       <v-spacer />
       <v-btn @click="closeDialog" depressed plain>Cancel</v-btn>
-      <v-btn @click="confirm" color="primary" depressed tile :disabled="!name" :loading="loading">Add</v-btn>
+      <v-btn @click="confirm" color="primary" depressed :disabled="!name" :loading="loading">Add</v-btn>
     </v-card-actions>
   </v-card>
 </template>
@@ -69,9 +69,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-.v-text-field {
-  border-radius: 0;
-}
-</style>

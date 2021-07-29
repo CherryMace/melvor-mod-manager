@@ -1,11 +1,11 @@
 <template>
-  <v-card color="blue-grey darken-3">
+  <v-card color="blue-grey darken-1">
     <v-card-title>Add From URL</v-card-title>
     <v-card-text>
       <v-container fluid>
         <v-row class="mb-1" no-gutters>
           <v-col cols="12">
-            <v-text-field solo-inverted tile flat dense single-line v-model="url" ref="urlTextField" hide-details @keydown.enter="add"></v-text-field>
+            <v-text-field solo-inverted flat dense single-line v-model="url" ref="urlTextField" hide-details @keydown.enter="add"></v-text-field>
           </v-col>
         </v-row>
         <div v-show="error" class="red--text">{{ error }}</div>
@@ -15,7 +15,7 @@
     <v-card-actions>
       <v-spacer />
       <v-btn @click="closeDialog" depressed plain>Cancel</v-btn>
-      <v-btn @click="add" color="primary" depressed tile :disabled="!validUrl" :loading="loading">Add</v-btn>
+      <v-btn @click="add" color="primary" depressed :disabled="!validUrl" :loading="loading">Add</v-btn>
     </v-card-actions>
   </v-card>
 </template>
@@ -88,9 +88,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-.v-text-field {
-  border-radius: 0;
-}
-</style>

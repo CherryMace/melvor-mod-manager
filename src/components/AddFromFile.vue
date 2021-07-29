@@ -1,14 +1,14 @@
 <template>
-  <v-card loading color="blue-grey darken-3">
+  <v-card loading color="blue-grey darken-1">
     <v-card-title>Add From File</v-card-title>
     <v-card-text>
       <v-container fluid>
         <v-row class="mb-1" no-gutters>
           <v-col cols="9">
-            <v-text-field solo-inverted tile flat dense disabled single-line v-model="fileName" hide-details></v-text-field>
+            <v-text-field solo-inverted flat dense disabled single-line v-model="fileName" hide-details></v-text-field>
           </v-col>
           <v-col cols="3">
-            <v-btn @click="promptFile" depressed tile block color="primary" height="38" :disabled="fileDialogOpen" :loading="loading">Browse</v-btn>
+            <v-btn @click="promptFile" depressed block color="primary" height="38" :disabled="fileDialogOpen" :loading="loading">Browse</v-btn>
           </v-col>
         </v-row>
         <div v-show="error" class="red--text">{{ error }}</div>
@@ -92,6 +92,12 @@ export default {
 
 <style lang="scss" scoped>
 .v-text-field {
-  border-radius: 0;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.v-btn {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
 }
 </style>
