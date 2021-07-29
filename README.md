@@ -6,6 +6,11 @@ Melvor Mod Manager (M3) allows you to quickly add userscripts and browser extens
 Download and run the setup .exe from the [Latest Release](https://github.com/ChaseStrackbein/melvor-mod-manager/releases/latest).
 
 ## Use
+
+**!!! Only add scripts or extensions that you trust !!!**
+
+**And as always, backing up your save(s) is a good idea before using any new tool or mod.**
+
 Once installed and launched:
 1. Click the 'Browse' button and find your Melvor Idle installation directory. It is most likely something like: `C:\Program Files (x86)\Steam\steamapps\common\Melvor Idle`
 2. Click the 'Add +' button and add a mod from either a file or a web URL.
@@ -25,6 +30,9 @@ You can adjust the load order of the mods using the arrows on the right-hand sid
 
 ## Screenshot
 ![Screenshot of M3](repo/app-screenshot.png)
+
+## License
+MIT
 
 ## Submitting Feedback or Contributing
 Feel free to [create an issue here on GitHub](https://github.com/ChaseStrackbein/melvor-mod-manager/issues) or reach out to me on Discord @ Buttchouda#3950.
