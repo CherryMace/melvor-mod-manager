@@ -13,10 +13,8 @@ export default new Vuetify({
   icons: {
     iconfont: 'faSvg',
     values: {
-      vue: {
-        component: FontAwesomeIcon,
-        props: { icon: ['fas', 'vuejs' ] }
-      }
+      check: 'fas fa-check',
     }
-  }
+  },
+  theme: { dark: true }
 });
