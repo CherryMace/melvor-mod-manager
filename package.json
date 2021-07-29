@@ -7,7 +7,7 @@
     "name": "Chase Strackbein",
     "email": "chase@gcherrymace.com"
   },
-  "repository": "",
+  "repository": "https://github.com/ChaseStrackbein/melvor-mod-manager",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
