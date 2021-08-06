@@ -24,7 +24,7 @@ export default {
       this.launching = true;
       try {
         await mods.inject(this.$store.state.dir, this.$store.state.mods);
-        await process.launchMelvor(this.$store.state.dir);
+        await process.launchMelvor();
         process.exit();
       } catch (e) {
         console.error(e);

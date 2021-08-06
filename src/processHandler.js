@@ -1,6 +1,6 @@
-import path from 'path';
-import cp from 'child_process';
 import { BrowserWindow } from 'electron';
+
+import open from 'open';
 
 import messageTypes from './messageTypes';
 
@@ -9,15 +9,10 @@ export default async (_event, message) => {
 };
 
 const handlers = {
-  [messageTypes.process.launchMelvor]: async ({ melvorDir }) => {
-    const exePath = path.join(melvorDir, 'Melvor Idle.exe');
+  [messageTypes.process.launchMelvor]: async () => {
+    const appId = 1267910;
 
-    const subprocess = cp.spawn(exePath, {
-      detached: true,
-      stdio: 'ignore'
-    });
-    
-    subprocess.unref();
+    open(`steam://run${appId}/`);
   },
   [messageTypes.process.minimize]: async () => {
     BrowserWindow.getFocusedWindow().minimize();
