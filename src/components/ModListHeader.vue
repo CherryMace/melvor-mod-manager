@@ -65,6 +65,7 @@
       </v-menu>
       <v-btn tile plain :disabled="!canUpdateAll" @click="updateAll">Update All</v-btn>
       <v-btn tile plain :disabled="!canBeUpdated" @click="update">Update</v-btn>
+      <v-btn tile plain :disabled="!canToggleDisabled" @click="toggleDisabled">{{ toggleDisabledText }}</v-btn>
       <v-btn tile plain :disabled="!canRemove" @click="remove">Remove</v-btn>
       <v-spacer />
       <span class="overline pt-1 text--secondary" style="user-select: none;">Load Order</span>
@@ -103,6 +104,9 @@ export default {
     canUpdateAll () {
       return !this.disabled && !this.modBeingUpdated && this.$store.state.mods.some(mod => mod.updateAvailable);
     },
+    canToggleDisabled () {
+      return !this.disabled && !!this.selectedMod;
+    },
     canRemove () {
       return !this.disabled && !!this.selectedMod;
     },
@@ -111,6 +115,9 @@ export default {
     },
     canMoveDown () {
       return !this.disabled && !!this.selectedMod && this.selectedModIndex < this.mods.length - 1;
+    },
+    toggleDisabledText () {
+      return (this.selectedMod && this.selectedMod.disabled) ? 'Enable' : 'Disable';
     }
   },
   methods: {
@@ -132,6 +139,9 @@ export default {
     },
     async update () {
       await this.$store.dispatch('updateMod', this.selectedMod.id);
+    },
+    async toggleDisabled () {
+      await this.$store.dispatch('setModDisabledState', { id: this.selectedMod.id, disabled: !this.selectedMod.disabled });
     },
     async remove () {
       await this.$store.dispatch('removeMod', this.selectedMod.id);

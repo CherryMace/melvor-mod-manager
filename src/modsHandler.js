@@ -316,6 +316,7 @@ const injectModId = async (dir, modId) => {
 const buildM3Js = (mods) => {
   const modInjectables = [];
   for (const mod of mods) {
+    if (mod.disabled) continue;
     modInjectables.push(`{ id: '${mod.id}', scripts: ${JSON.stringify(mod.entryScripts || [])}, styles: ${JSON.stringify(mod.styles || [])} }`);
   }
   return `

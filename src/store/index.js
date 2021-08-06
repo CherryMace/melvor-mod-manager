@@ -12,6 +12,7 @@ export default new Vuex.Store({
     isValidDir: false,
     mods: [],
     modLoadOrder: [],
+    disabledMods: [],
     selectedMod: null,
     modBeingUpdated: null,
     isLoadingMods: false
@@ -35,6 +36,9 @@ export default new Vuex.Store({
     setModLoadOrder (state, loadOrder) {
       state.modLoadOrder = loadOrder;
     },
+    setDisabledMods (state, mods) {
+      state.disabledMods = mods;
+    },
     setMods (state, mods) {
       state.mods = mods;
     },
@@ -52,7 +56,10 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    async loadSavedState ({ dispatch }) {
+    async loadSavedState ({ commit, dispatch }) {
+      const disabledMods = localStorage.getItem('disabledMods');
+      if (disabledMods) commit('setDisabledMods', JSON.parse(disabledMods));
+
       const loadOrder = localStorage.getItem('modLoadOrder');
       if (loadOrder) dispatch('loadModLoadOrder', JSON.parse(loadOrder));
 
@@ -89,7 +96,8 @@ export default new Vuex.Store({
       commit('setLoadModsState', true);
       const mods = await api.mods.loadAll(state.dir, checkForUpdates);
       commit('setLoadModsState', false);
-      const modsOrderedByLoadOrder = sortModsByLoadOrder(mods, state.modLoadOrder);
+      const modsWithDisabledFlag = mods.map(mod => ({ ...mod, disabled: state.disabledMods.includes(mod.id) }));
+      const modsOrderedByLoadOrder = sortModsByLoadOrder(modsWithDisabledFlag, state.modLoadOrder);
       await dispatch('setMods', modsOrderedByLoadOrder);
     },
     async loadMod ({ state, commit, dispatch }, id) {
@@ -97,6 +105,7 @@ export default new Vuex.Store({
       const modToLoad = await api.mods.load(state.dir, id);
       commit('setLoadModsState', false);
       if (!modToLoad) return;
+      modToLoad.disabled = state.disabledMods.includes(id);
       const alreadyLoaded = state.mods.find(mod => mod.id === modToLoad.id);
 
       let mods = [];
@@ -107,6 +116,16 @@ export default new Vuex.Store({
         mods = sortModsByLoadOrder(mods, state.modLoadOrder);
       }
       await dispatch('setMods', mods);
+    },
+    async setModDisabledState ({ state, dispatch }, { id, disabled }) {
+      const mods = state.mods.map(mod => mod.id === id ? { ...mod, disabled } : mod);
+      await dispatch('setMods', mods);
+      dispatch('saveDisabledMods');
+    },
+    saveDisabledMods ({ state, commit }) {
+      const disabledMods = state.mods.filter(mod => mod.disabled).map(mod => mod.id);
+      commit('setDisabledMods', disabledMods);
+      localStorage.setItem('disabledMods', JSON.stringify(disabledMods));
     },
     async addMod({ dispatch }, filePath) {
       const { id } = await api.mods.add(filePath);
