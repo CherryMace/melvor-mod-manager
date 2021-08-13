@@ -25,9 +25,11 @@ contextBridge.exposeInMainWorld('mods', {
   // Returns error
   add: async (melvorDir, origin, manifest, content) => await ipcRenderer.invoke('mods', { type: mods.add, melvorDir, origin, manifest, content }),
   // Returns array of mod manifests
-  loadAll: async (melvorDir, checkForUpdates) => await ipcRenderer.invoke('mods', { type: mods.loadAll, melvorDir, checkForUpdates }),
+  loadAll: async (melvorDir) => await ipcRenderer.invoke('mods', { type: mods.loadAll, melvorDir }),
   // Returns mod manifest
-  load: async (melvorDir, id, checkForUpdates) => await ipcRenderer.invoke('mods', { type: mods.load, melvorDir, id, checkForUpdates }),
+  load: async (melvorDir, id) => await ipcRenderer.invoke('mods', { type: mods.load, melvorDir, id }),
+  // Returns latest mod version or null if unable to fetch
+  checkForUpdates: async (mod) => await ipcRenderer.invoke('mods', { type: mods.checkForUpdates, mod }),
   // Returns error
   update: async (melvorDir, id) => await ipcRenderer.invoke('mods', { type: mods.update, melvorDir, id }),
   // Returns error

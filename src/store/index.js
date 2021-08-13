@@ -42,6 +42,9 @@ export default new Vuex.Store({
     setMods (state, mods) {
       state.mods = mods;
     },
+    setMod (state, mod) {
+      state.mods = state.mods.map(m => m.id === mod.id ? mod : m);
+    },
     selectMod (state, id) {
       state.selectedMod = id;
     },
@@ -92,23 +95,28 @@ export default new Vuex.Store({
       dispatch('saveModLoadOrder');
       await api.mods.inject(state.dir, mods);
     },
-    async loadMods ({ state, commit, dispatch }, checkForUpdates = true) {
+    async loadMods ({ state, commit, dispatch }) {
       commit('setLoadModsState', true);
-      const mods = await api.mods.loadAll(state.dir, checkForUpdates);
+      const mods = await api.mods.loadAll(state.dir);
       commit('setLoadModsState', false);
       const modsWithDisabledFlag = mods.map(mod => ({ ...mod, disabled: state.disabledMods.includes(mod.id) }));
       const modsOrderedByLoadOrder = sortModsByLoadOrder(modsWithDisabledFlag, state.modLoadOrder);
       await dispatch('setMods', modsOrderedByLoadOrder);
+
+      for (const mod of modsOrderedByLoadOrder) {
+        await dispatch('checkForUpdates', mod);
+      }
     },
     async loadMod ({ state, commit, dispatch }, id) {
       commit('setLoadModsState', true);
       const modToLoad = await api.mods.load(state.dir, id);
       commit('setLoadModsState', false);
       if (!modToLoad) return;
+
       modToLoad.disabled = state.disabledMods.includes(id);
-      const alreadyLoaded = state.mods.find(mod => mod.id === modToLoad.id);
 
       let mods = [];
+      const alreadyLoaded = state.mods.find(mod => mod.id === modToLoad.id);
       if (alreadyLoaded) {
         mods = state.mods.map(mod => mod.id === modToLoad.id ? modToLoad : mod);
       } else {
@@ -116,6 +124,7 @@ export default new Vuex.Store({
         mods = sortModsByLoadOrder(mods, state.modLoadOrder);
       }
       await dispatch('setMods', mods);
+      await dispatch('checkForUpdates', modToLoad);
     },
     async setModDisabledState ({ state, dispatch }, { id, disabled }) {
       const mods = state.mods.map(mod => mod.id === id ? { ...mod, disabled } : mod);
@@ -134,6 +143,10 @@ export default new Vuex.Store({
     },
     selectMod ({ commit }, id) {
       commit('selectMod', id);
+    },
+    async checkForUpdates ({ commit }, mod) {
+      const updateAvailable = await api.mods.checkForUpdates(mod);
+      if (updateAvailable) commit('setMod', { ...mod, updateAvailable });
     },
     async updateAllMods ({ state, dispatch }) {
       for (const mod of state.mods) {

@@ -79,7 +79,7 @@ const handlers = {
     }
   },
 
-  [mods.loadAll]: async ({ melvorDir, checkForUpdates }) => {
+  [mods.loadAll]: async ({ melvorDir }) => {
     try {
       const modPath = getModPath(melvorDir);
       if (!await pathExists(modPath)) return [];
@@ -93,8 +93,7 @@ const handlers = {
         if (!await pathExists(manifestPath)) continue;
         try {
           const manifest = await readJson(manifestPath);
-          const updateAvailable = (checkForUpdates && manifest.origin) ? await getUpdates(manifest) : null;
-          loadedMods.push({ ...manifest, updateAvailable });
+          loadedMods.push(manifest);
         } catch (e) {
           console.error(e);
           continue;
@@ -108,16 +107,23 @@ const handlers = {
     }
   },
 
-  [mods.load]: async ({ melvorDir, id, checkForUpdates }) => {
+  [mods.load]: async ({ melvorDir, id }) => {
     try {
       const modPath = getModPath(melvorDir, id);
       const manifest = await readJson(path.join(modPath, 'manifest.json'));
-      const updateAvailable = (checkForUpdates && manifest.origin) ? await getUpdates(manifest) : null;
-
-      return { ...manifest, updateAvailable };
+      return manifest;
     } catch (e) {
-      console.log(e);
+      console.error(e);
       return { error: `Unable to load mod ${id}.`};
+    }
+  },
+
+  [mods.checkForUpdates]: async ({ mod }) => {
+    try {
+      return await getUpdates(mod);
+    } catch (e) {
+      console.error(e);
+      return null;
     }
   },
 

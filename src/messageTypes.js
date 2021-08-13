@@ -17,6 +17,7 @@ export const mods = {
   add: 'add',
   loadAll: 'load-all',
   load: 'load',
+  checkForUpdates: 'check-for-updates',
   update: 'update',
   remove: 'remove',
   inject: 'inject'

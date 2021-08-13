@@ -14,9 +14,9 @@
       </div>
       <div class="text-right">
         <div v-if="mod.version" :class="{ 'text--disabled': mod.disabled }">v{{ mod.version }}</div>
-        <v-tooltip bottom>
+        <v-tooltip v-if="mod.updateAvailable"  bottom>
           <template v-slot:activator="{ attrs, on }">
-            <div v-if="mod.updateAvailable" class="body-2" :class="{ 'text--disabled': mod.disabled }" v-bind="attrs" v-on="on">
+            <div class="body-2" :class="{ 'text--disabled': mod.disabled }" v-bind="attrs" v-on="on">
               <font-awesome-icon class="green--text" :icon="['fas', 'arrow-circle-up']" />
               v{{ mod.updateAvailable }}
             </div>
