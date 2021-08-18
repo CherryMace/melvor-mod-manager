@@ -5,7 +5,7 @@
         <system-bar class="flex-grow-0 flex-shrink-0" />
         <v-container class="flex-column pa-0" fill-height fluid>
           <main-header class="flex-grow-0 flex-shrink-0" :disabled="!isValidDir" />
-          <main-view :disabled="!isValidDir" />
+          <router-view />
         </v-container>
       </div>
     </v-main>
@@ -17,11 +17,10 @@ import { mapState } from 'vuex';
 
 import SystemBar from './components/SystemBar.vue';
 import MainHeader from './components/MainHeader.vue';
-import MainView from './components/MainView.vue';
 
 export default {
   name: 'App',
-  components: { SystemBar, MainHeader, MainView },
+  components: { SystemBar, MainHeader },
   computed: {
     ...mapState(['isValidDir'])
   },

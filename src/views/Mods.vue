@@ -13,8 +13,8 @@
 </template>
 
 <script>
-import ModListHeader from './ModListHeader.vue';
-import ModList from './ModList.vue';
+import ModListHeader from '../components/ModListHeader.vue';
+import ModList from '../components/ModList.vue';
 
 export default {
   components: { ModListHeader, ModList },
