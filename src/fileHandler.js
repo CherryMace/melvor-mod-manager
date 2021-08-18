@@ -1,8 +1,6 @@
 import { dialog } from 'electron';
-import { access, readFile } from 'fs/promises';
+import { access } from 'fs/promises';
 import path from 'path';
-
-import usp from 'userscript-parser';
 
 import { file } from './messageTypes';
 

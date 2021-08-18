@@ -74,7 +74,7 @@ const handlers = {
       return manifest;
     } catch (e) {
       console.error(e);
-      await remove(modPath);
+      await remove(getModPath(melvorDir, manifest.id));
       return { error: 'Unable to add the selected mod.' };
     }
   },
