@@ -1,15 +1,15 @@
 <template>
-  <v-system-bar class="blue-grey darken-1 pa-0" window>
+  <v-system-bar class="test-color-dark pa-0" app window>
     <div class="system-draggable-area"></div>
     <v-spacer />
-    <v-btn small tile depressed color="blue-grey darken-1" height="32" @click="minimize">
-      <font-awesome-icon :icon="['fas', 'window-minimize']"></font-awesome-icon>
+    <v-btn small tile depressed color="transparent" height="32" @click="minimize">
+      <v-icon small>minimize</v-icon>
     </v-btn>
-    <v-btn small tile depressed color="blue-grey darken-1" height="32" @click="maximize">
-      <font-awesome-icon :icon="['fas', 'window-maximize']"></font-awesome-icon>
+    <v-btn small tile depressed color="transparent" height="32" @click="maximize">
+      <v-icon small>web_asset</v-icon>
     </v-btn>
-    <v-btn small tile depressed color="blue-grey darken-1" height="32" @click="close">
-      <font-awesome-icon :icon="['fas', 'times']"></font-awesome-icon>
+    <v-btn small tile depressed color="transparent" height="32" @click="close">
+      <v-icon small>close</v-icon>
     </v-btn>
   </v-system-bar>
 </template>
@@ -42,7 +42,7 @@ export default {
 }
 
 .v-system-bar {
-  //background: linear-gradient(90deg, #263238 0%, #546E7A 100%);
+  background: linear-gradient(90deg, #05090c 148px, #111b27 100%);
 }
 
 .v-system-bar button {

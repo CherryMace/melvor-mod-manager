@@ -1,39 +1,38 @@
 <template>
-    <v-form>
-      <v-row no-gutters>
-        <v-col cols="10" lg="11">
-          <div @dblclick="promptDirectory">
-            <v-text-field class="squared-text-field ellipses" flat solo tile dense disabled single-line v-model="dir" hide-details>
-              <template v-slot:prepend-inner>
-                <font-awesome-icon :icon="display[result].icon" :color="display[result].color"></font-awesome-icon>
-              </template>
-            </v-text-field>
-          </div>
-        </v-col>
-        <v-col cols="2" lg="1">
-          <v-btn block height="38" color="lighten-1" class="squared-left-button" :class="result === 'success' ? 'blue-grey text--secondary' : 'primary'" :disabled="openingDirectory" depressed @click="promptDirectory">
-            <span class="d-none d-sm-inline">Browse</span>
-            <font-awesome-icon class="d-sm-none" :icon="['fas', 'search']"></font-awesome-icon>
-          </v-btn>
-        </v-col>
-      </v-row>
-    </v-form>
+  <div class="d-flex" style="width:100%">
+    <div @dblclick="promptDirectory" class="flex-grow-1">
+      <v-text-field class="squared-text-field ellipses" flat solo tile dense disabled single-line v-model="dir" hide-details>
+        <template v-slot:prepend-inner>
+          <v-icon :color="display[result].color">{{ display[result].icon }}</v-icon>
+        </template>
+      </v-text-field>
+    </div>
+    <v-btn v-if="result !== 'success'" height="38" color="teal darken-2" class="squared-left-button" :disabled="openingDirectory" depressed @click="promptDirectory">
+      <span class="d-none d-sm-inline">Browse</span>
+      <v-icon right small>search</v-icon>
+    </v-btn>
+    <v-btn v-else height="38" color="teal" class="squared-left-button" :loading="launching" depressed @click="launchMelvor">
+      <span class="d-none d-sm-inline">Launch</span>
+      <v-icon right small>play_arrow</v-icon>
+    </v-btn>
+  </div>
 </template>
 
 <script>
 import { mapState } from 'vuex';
 
-import { file } from '@/api';
+import { file, mods, process } from '@/api';
 
 export default {
   data () {
     return {
       openingDirectory: false,
       display: {
-        'success': { icon: ['fas', 'check-circle'], color: '#4caf50' },
-        'failure': { icon: ['fas', 'times-circle'], color: '#ff5252' },
-        'none': { icon: ['fas', 'folder'], color: 'inherit' }
-      }
+        'success': { icon: 'check_circle', color: '#4caf50' },
+        'failure': { icon: 'cancel', color: '#ff5252' },
+        'none': { icon: 'folder', color: 'inherit' }
+      },
+      launching: false
     }
   },
   computed: {
@@ -51,6 +50,17 @@ export default {
       const dir = await file.openDir();
       if (dir) await this.$store.dispatch('setDir', dir);
       this.openingDirectory = false;
+    },
+    async launchMelvor () {
+      this.launching = true;
+      try {
+        await mods.inject(this.$store.state.dir, this.$store.state.mods);
+        await process.launchMelvor();
+        process.exit();
+      } catch (e) {
+        console.error(e);
+      }
+      this.launching = false;
     }
   }
 };
@@ -62,7 +72,7 @@ export default {
   border-bottom-right-radius: 0 !important;
 
   .v-input__slot {
-    background-color: #263238 !important;
+    background-color: #05090c !important;
   }
 }
 

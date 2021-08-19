@@ -1,5 +1,5 @@
 <template>
-  <v-card loading color="blue-grey darken-1">
+  <v-card loading color="#05090c">
     <v-card-title>Add From File</v-card-title>
     <v-card-text>
       <v-container fluid>

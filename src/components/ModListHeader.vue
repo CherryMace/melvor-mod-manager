@@ -4,19 +4,20 @@
       <v-menu offset-y right :value="addMenu">
         <template v-slot:activator="{ attrs, on }">
           <v-btn
-            color="success"
+            color="lime accent-4"
             v-bind="attrs"
             v-on="on"
+            outlined
             depressed
             :disabled="disabled"
             @click="addMenu = true"
           >
             Add
-            <font-awesome-icon class="ml-2" :icon="['fas', 'plus']"></font-awesome-icon>
+            <v-icon small>add</v-icon>
           </v-btn>
         </template>
 
-        <v-list color="blue-grey">
+        <v-list dense color="#05090c">
           <v-dialog
             v-model="fileDialog" 
             :overlay="false"
@@ -26,7 +27,7 @@
             <template v-slot:activator="{ attrs, on }">
               <v-list-item link v-bind="attrs" v-on="on" >
                 <v-list-item-title>
-                  <font-awesome-icon class="mr-2" :icon="['fas', 'file']"></font-awesome-icon>
+                  <v-icon small>insert_drive_file</v-icon>
                   From File
                 </v-list-item-title>
               </v-list-item>
@@ -44,7 +45,7 @@
             <template v-slot:activator="{ attrs, on }">
               <v-list-item link v-bind="attrs" v-on="on">
                 <v-list-item-title>
-                  <font-awesome-icon class="mr-2" :icon="['fas', 'globe']"></font-awesome-icon>
+                  <v-icon small>language</v-icon>
                   From URL
                 </v-list-item-title>
               </v-list-item>
@@ -69,8 +70,8 @@
       <v-btn tile plain :disabled="!canRemove" @click="remove">Remove</v-btn>
       <v-spacer />
       <span class="overline pt-1 text--secondary" style="user-select: none;">Load Order</span>
-      <v-btn tile plain icon :disabled="!canMoveUp" @click="moveUp"><font-awesome-icon :icon="['fas', 'chevron-up']"></font-awesome-icon></v-btn>
-      <v-btn tile plain icon :disabled="!canMoveDown" @click="moveDown"><font-awesome-icon :icon="['fas', 'chevron-down']"></font-awesome-icon></v-btn>
+      <v-btn tile plain icon :disabled="!canMoveUp" @click="moveUp"><v-icon>keyboard_arrow_up</v-icon></v-btn>
+      <v-btn tile plain icon :disabled="!canMoveDown" @click="moveDown"><v-icon>keyboard_arrow_down</v-icon></v-btn>
     </div>
   </section>
 </template>

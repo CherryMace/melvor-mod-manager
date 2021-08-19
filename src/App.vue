@@ -1,10 +1,11 @@
 <template>
   <v-app>
-    <v-main class="blue-grey darken-2">
+    <system-bar />
+    <toolbar />
+    <sidebar />
+    <v-main class="theme-color">
       <div class="d-flex flex-column fill-height">
-        <system-bar class="flex-grow-0 flex-shrink-0" />
         <v-container class="flex-column pa-0" fill-height fluid>
-          <main-header class="flex-grow-0 flex-shrink-0" :disabled="!isValidDir" />
           <router-view />
         </v-container>
       </div>
@@ -16,11 +17,12 @@
 import { mapState } from 'vuex';
 
 import SystemBar from './components/SystemBar.vue';
-import MainHeader from './components/MainHeader.vue';
+import Toolbar from './components/Toolbar.vue';
+import Sidebar from './components/Sidebar.vue';
 
 export default {
   name: 'App',
-  components: { SystemBar, MainHeader },
+  components: { SystemBar, Toolbar, Sidebar },
   computed: {
     ...mapState(['isValidDir'])
   },
@@ -43,6 +45,14 @@ html {
 }
 input, button, textarea, :focus {
     outline: none; // You should add some other style for :focus to help UX/a11y
+}
+
+.theme-color {
+  background-color: #111b27;
+}
+
+.theme-color-dark {
+  background-color: #05090c;
 }
 
 *::-webkit-scrollbar {

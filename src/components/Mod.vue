@@ -1,6 +1,6 @@
 <template>
-  <v-list-item :disabled="disabled" :value="mod.id" :class="borderColor">
-    <div class="mod pa-4 d-flex align-center blue-grey darken-1" :class="{ disabled: mod.disabled }">
+  <v-list-item :disabled="disabled" :value="mod.id" class="pl-0 theme-color-dark mb-2" active-class="theme-color">
+    <div class="mod pa-4 d-flex align-center" :class="{ disabled: mod.disabled }">
       <div class="load-order d-flex align-center mr-3">
         <h3 class="text-h3 text--disabled">{{ loadOrder }}</h3>
       </div>
@@ -17,7 +17,7 @@
         <v-tooltip v-if="mod.updateAvailable"  bottom>
           <template v-slot:activator="{ attrs, on }">
             <div class="body-2" :class="{ 'text--disabled': mod.disabled }" v-bind="attrs" v-on="on">
-              <font-awesome-icon class="green--text" :icon="['fas', 'arrow-circle-up']" />
+              <v-icon color="success">arrow_circle_up</v-icon>
               v{{ mod.updateAvailable }}
             </div>
           </template>
@@ -38,30 +38,31 @@ export default {
       if ((/^https?:\/\/(www\.)?greasyfork\.org/).test(this.mod.origin))
         return 'Greasy Fork';
       return 'Unknown';
-    },
-    isSelected () {
-      return this.mod.id === this.$store.state.selectedMod;
-    },
-    borderColor () {
-      if (this.mod.disabled && this.isSelected) return 'blue-grey darken-3';
-      if (this.mod.disabled) return 'blue-grey darken-4';
-      if (this.isSelected) return 'lime accent-4';
-      return 'lime darken-2';
     }
   }
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .mod {
   width: 100%;
+  border-radius: 4px;
+  border-left: 0.5rem solid #aeea00;
 
-  &.disabled .title {
-    text-decoration: line-through;
+  &.disabled {
+    border-color: hsla(0, 0, 100%, 0.5);
+
+    .title {
+      text-decoration: line-through;
+    }
   }
 }
 
 .load-order {
   height: 75px;
+}
+
+.selected-mod {
+  background-color: #fff;
 }
 </style>

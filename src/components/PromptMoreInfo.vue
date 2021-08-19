@@ -1,5 +1,5 @@
 <template>
-  <v-card color="blue-grey darken-1">
+  <v-card color="#05090c">
     <v-card-title>Add Mod</v-card-title>
     <v-card-text>
       <v-container fluid>

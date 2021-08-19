@@ -11,8 +11,8 @@ export default async (_event, message) => {
 const handlers = {
   [messageTypes.process.launchMelvor]: async () => {
     const appId = 1267910;
-
-    open(`steam://run${appId}/`);
+    console.log('Here!');
+    open(`steam://run/${appId}`);
   },
   [messageTypes.process.minimize]: async () => {
     BrowserWindow.getFocusedWindow().minimize();
