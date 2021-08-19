@@ -1,7 +1,7 @@
 <template>
   <section>
     <v-list nav dense color="transparent">
-      <v-list-item-group @change="onChangeSelectedMod">
+      <v-list-item-group @change="onChangeSelectedMod" color="#a8cded">
         <Mod
           v-for="(mod, i) in mods"
           :key="mod.id"
