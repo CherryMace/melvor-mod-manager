@@ -8,7 +8,7 @@
             <v-text-field solo-inverted flat dense disabled single-line v-model="fileName" hide-details></v-text-field>
           </v-col>
           <v-col cols="3">
-            <v-btn @click="promptFile" depressed block color="primary" height="38" :disabled="fileDialogOpen" :loading="loading">Browse</v-btn>
+            <v-btn @click="promptFile" depressed block color="teal" height="38" :disabled="fileDialogOpen" :loading="loading">Browse</v-btn>
           </v-col>
         </v-row>
         <div v-show="error" class="red--text">{{ error }}</div>

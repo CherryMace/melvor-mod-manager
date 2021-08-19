@@ -15,7 +15,7 @@
     <v-card-actions>
       <v-spacer />
       <v-btn @click="closeDialog" depressed plain>Cancel</v-btn>
-      <v-btn @click="add" color="primary" depressed :disabled="!validUrl" :loading="loading">Add</v-btn>
+      <v-btn @click="add" color="teal" depressed :disabled="!validUrl" :loading="loading">Add</v-btn>
     </v-card-actions>
   </v-card>
 </template>
