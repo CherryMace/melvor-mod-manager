@@ -50,7 +50,7 @@ export default {
   border-left: 0.5rem solid #aeea00;
 
   &.disabled {
-    border-color: hsla(0, 0, 100%, 0.5);
+    border-color: #ffffff7f;
 
     .title {
       text-decoration: line-through;
