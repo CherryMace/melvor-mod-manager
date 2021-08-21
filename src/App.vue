@@ -14,8 +14,6 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
-
 import SystemBar from './components/SystemBar.vue';
 import Toolbar from './components/Toolbar.vue';
 import Sidebar from './components/Sidebar.vue';
@@ -23,9 +21,6 @@ import Sidebar from './components/Sidebar.vue';
 export default {
   name: 'App',
   components: { SystemBar, Toolbar, Sidebar },
-  computed: {
-    ...mapState(['isValidDir'])
-  },
   created () {
     this.$store.dispatch('loadSavedState');
   }

@@ -69,7 +69,7 @@
       <v-btn tile plain :disabled="!canToggleDisabled" @click="toggleDisabled">{{ toggleDisabledText }}</v-btn>
       <v-btn tile plain :disabled="!canRemove" @click="remove">Remove</v-btn>
       <v-spacer />
-      <span class="overline pt-1 text--secondary" style="user-select: none;">Load Order</span>
+      <span class="overline pt-1 text--secondary" :class="{ 'text--disabled': disabled }">Load Order</span>
       <v-btn tile plain icon :disabled="!canMoveUp" @click="moveUp"><v-icon>keyboard_arrow_up</v-icon></v-btn>
       <v-btn tile plain icon :disabled="!canMoveDown" @click="moveDown"><v-icon>keyboard_arrow_down</v-icon></v-btn>
     </div>

@@ -18,6 +18,10 @@ import ModList from '../components/ModList.vue';
 
 export default {
   components: { ModListHeader, ModList },
-  props: ['disabled']
+  computed: {
+    disabled () {
+      return !this.$store.state.isValidDir;
+    }
+  }
 }
 </script>
