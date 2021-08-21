@@ -313,8 +313,8 @@ const injectModId = async (dir, modId) => {
     if (!(/\.js$/).test(filePath)) continue;
 
     const contents = await readFile(filePath, 'utf8');
-    if (!(/runtime\.getURL\(/).test(contents)) continue;
-    const newContents = contents.replace(/runtime\.getURL\(/g, 'runtime.getURL("Mods/' + modId + '/" + ');
+    if (!(/getURL\(([^\)]*)/).test(contents)) continue;
+    const newContents = contents.replace(/getURL\(([^\)]*)/g, 'getURL($1, "Mods/' + modId + '/"');
     await writeFile(filePath, newContents);
   }
 }
@@ -341,6 +341,12 @@ const buildM3Js = (mods) => {
   const inject = () => {
     const fs = require('fs');
     const path = require('path');
+
+    const runtimeGetURL = chrome.runtime.getURL;
+    chrome.runtime.getURL = (path, modId) => {
+      if (modId) path = modId + path;
+      return runtimeGetURL(path);
+    };
 
     const mods = [
       ${modInjectables.join(',\n      ')}
