@@ -10,6 +10,9 @@ export default new Vuex.Store({
   state: {
     dir: '',
     isValidDir: false,
+    checkForUpdates: true,
+    launchMode: 'steam',
+    closeOnLaunch: true,
     mods: [],
     modLoadOrder: [],
     disabledMods: [],
@@ -56,10 +59,22 @@ export default new Vuex.Store({
     },
     setLoadModsState (state, isLoading) {
       state.isLoadingMods = isLoading;
+    },
+    setSetting (state, { key, value }) {
+      state[key] = value;
     }
   },
   actions: {
     async loadSavedState ({ commit, dispatch }) {
+      const checkForUpdates = localStorage.getItem('checkForUpdates');
+      if (checkForUpdates !== null) commit('setSetting', { key: 'checkForUpdates', value: checkForUpdates === "true" });
+
+      const launchMode = localStorage.getItem('launchMode');
+      if (launchMode) commit('setSetting', { key: 'launchMode', value: launchMode });
+
+      const closeOnLaunch = localStorage.getItem('closeOnLaunch');
+      if (closeOnLaunch !== null) commit('setSetting', { key: 'closeOnLaunch', value: closeOnLaunch === "true" });
+
       const disabledMods = localStorage.getItem('disabledMods');
       if (disabledMods) commit('setDisabledMods', JSON.parse(disabledMods));
 
@@ -103,8 +118,10 @@ export default new Vuex.Store({
       const modsOrderedByLoadOrder = sortModsByLoadOrder(modsWithDisabledFlag, state.modLoadOrder);
       await dispatch('setMods', modsOrderedByLoadOrder);
 
-      for (const mod of modsOrderedByLoadOrder) {
-        await dispatch('checkForUpdates', mod);
+      if (state.checkForUpdates) {
+        for (const mod of modsOrderedByLoadOrder) {
+          await dispatch('checkForUpdates', mod);
+        }
       }
     },
     async loadMod ({ state, commit, dispatch }, id) {
@@ -124,7 +141,9 @@ export default new Vuex.Store({
         mods = sortModsByLoadOrder(mods, state.modLoadOrder);
       }
       await dispatch('setMods', mods);
-      await dispatch('checkForUpdates', modToLoad);
+      if (state.checkForUpdates) {
+        await dispatch('checkForUpdates', modToLoad);
+      }
     },
     async setModDisabledState ({ state, dispatch }, { id, disabled }) {
       const mods = state.mods.map(mod => mod.id === id ? { ...mod, disabled } : mod);
@@ -175,6 +194,10 @@ export default new Vuex.Store({
       mods[index] = mods[moveToIndex];
       mods[moveToIndex] = modToMove;
       await dispatch('setMods', mods);
+    },
+    changeSetting ({ commit }, { key, value }) {
+      localStorage.setItem(key, value);
+      commit('setSetting', { key, value });
     }
   }
 })

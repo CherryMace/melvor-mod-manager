@@ -7,11 +7,11 @@
         </template>
       </v-text-field>
     </div>
-    <v-btn v-if="result !== 'success'" height="38" color="teal darken-2" class="squared-left-button" :disabled="openingDirectory" depressed @click="promptDirectory">
+    <v-btn v-if="result !== 'success'" height="38" color="primary darken-2" class="squared-left-button" :disabled="openingDirectory" depressed @click="promptDirectory">
       <span class="d-none d-sm-inline">Browse</span>
       <v-icon right small>search</v-icon>
     </v-btn>
-    <v-btn v-else height="38" color="teal" class="squared-left-button" :loading="launching" depressed @click="launchMelvor">
+    <v-btn v-else height="38" color="primary" class="squared-left-button" :loading="launching" depressed @click="launchMelvor">
       <span class="d-none d-sm-inline">Launch</span>
       <v-icon right small>play_arrow</v-icon>
     </v-btn>
@@ -55,8 +55,8 @@ export default {
       this.launching = true;
       try {
         await mods.inject(this.$store.state.dir, this.$store.state.mods);
-        await process.launchMelvor();
-        process.exit();
+        await process.launchMelvor(this.$store.state.dir, this.$store.state.launchMode);
+        if (this.$store.state.closeOnLaunch) process.exit();
       } catch (e) {
         console.error(e);
       }

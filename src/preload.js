@@ -2,7 +2,7 @@ import { process, file, mods } from './messageTypes';
 import { contextBridge, ipcRenderer } from 'electron';
 
 contextBridge.exposeInMainWorld('process', {
-  launchMelvor: (melvorDir) => ipcRenderer.invoke('process', { type: process.launchMelvor, melvorDir }),
+  launchMelvor: async (melvorDir, launchMode) => await ipcRenderer.invoke('process', { type: process.launchMelvor, melvorDir, launchMode }),
   minimize: () => ipcRenderer.invoke('process', { type: process.minimize }),
   maximize: () => ipcRenderer.invoke('process', { type: process.maximize }),
   exit: () => ipcRenderer.invoke('process', { type: process.exit })
