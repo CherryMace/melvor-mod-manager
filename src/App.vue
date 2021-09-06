@@ -39,7 +39,7 @@ html {
     user-select: none;
 }
 input, button, textarea, :focus {
-    outline: none; // You should add some other style for :focus to help UX/a11y
+    outline: none;
 }
 
 .theme-color {
