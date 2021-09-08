@@ -7,24 +7,43 @@
     </div>
     <v-list dense nav>
       <v-list-item-group color="teal lighten-2">
-        <v-list-item link to="/">
+
+        <v-list-item v-for="item in navItems" :key="item.title" link :to="item.link">
           <v-list-item-icon>
-            <v-icon>view_list</v-icon>
+            <v-icon>{{ item.icon }}</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
-            <v-list-item-title>Mods</v-list-item-title>
+            <v-list-item-title>{{ item.title }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
 
-        <v-list-item link to="/settings">
-          <v-list-item-icon>
-            <v-icon>settings</v-icon>
-          </v-list-item-icon>
-          <v-list-item-content>
-            <v-list-item-title>Settings</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
       </v-list-item-group>
     </v-list>
   </v-navigation-drawer>
 </template>
+
+<script>
+export default {
+  data () {
+    return {
+      navItems: [
+        {
+          title: 'Browse',
+          icon: 'search',
+          link: '/browse'
+        },
+        {
+          title: 'My Mods',
+          icon: 'view_list',
+          link: '/'
+        },
+        {
+          title: 'Settings',
+          icon: 'settings',
+          link: '/settings'
+        }
+      ]
+    }
+  }
+}
+</script>
