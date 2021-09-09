@@ -1,5 +1,6 @@
 export const process = {
   launchMelvor: 'launch-melvor',
+  openLink: 'open-link',
   minimize: 'minimize',
   maximize: 'maximize',
   exit: 'exit'
@@ -14,6 +15,7 @@ export const file = {
 export const mods = {
   parseFile: 'parse-file',
   parseWeb: 'parse-web',
+  browserInstall: 'browser-install',
   add: 'add',
   loadAll: 'load-all',
   load: 'load',

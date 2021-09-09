@@ -1,9 +1,12 @@
-import { pathExists, readFile, readJson, writeFile, writeJson, ensureDir, opendir, copy, remove, readdir, lstat } from 'fs-extra';
+import { pathExists, readFile, readJson, writeFile, writeJson, ensureDir, opendir, emptyDir, copy, remove, readdir, lstat } from 'fs-extra';
 import path from 'path';
+import { app, BrowserWindow } from 'electron';
 
 import axios from 'axios';
 import cheerio from 'cheerio';
 import usp from 'userscript-parser';
+import { download } from 'electron-dl';
+import decompress from 'decompress';
 
 import { isGreasyForkUrl } from './util';
 import { mods } from './messageTypes';
@@ -24,9 +27,9 @@ const handlers = {
     }
   },
 
-  [mods.parseWeb]: async ({ origin }) => {
+  [mods.parseWeb]: async ({ origin, fromBrowser }) => {
     try {
-      if (!isWebOrigin(origin) || !isGreasyForkUrl(origin))
+      if (!isWebOrigin(origin) || (!fromBrowser && !isGreasyForkUrl(origin)))
         return { error: 'Only web scripts from GreasyFork are currently supported.' };
 
       const script = await downloadScript(origin);
@@ -41,9 +44,32 @@ const handlers = {
     }
   },
 
+  [mods.browserInstall]: async ({ melvorDir, data }) => {
+    let res;
+
+    if (data.type === 'script') {
+      const { manifest, content } = await handlers[mods.parseWeb]({ origin: data.download, fromBrowser: true });
+      const browserManifest = { ...manifest, name: data.title, origin: 'browser', browserId: data.id };
+      res = await handlers[mods.add]({ melvorDir, origin: data.url, manifest: browserManifest, content: content });
+    } else {
+      const tempPath = path.join(app.getPath('temp'), 'M3');
+      await ensureDir(tempPath);
+      const dl = await download(BrowserWindow.getFocusedWindow(), data.download, { directory: tempPath });
+      const extDir = path.join(tempPath, dl.getFilename().split('.')[0]);
+      await decompress(dl.savePath, extDir);
+      const manifestPath = await findManifest(extDir);
+      if (!manifestPath) return;
+      const manifest = await handlers[mods.parseFile]({ filePath: manifestPath });
+      const browserManifest = { ...manifest, name: data.title, origin: 'browser', browserId: data.id };
+      res = await handlers[mods.add]({ melvorDir, origin: manifestPath, manifest: browserManifest });
+      await emptyDir(tempPath);
+    }
+
+    return res;
+  },
+
   [mods.add]: async ({ melvorDir, origin, manifest, content }) => {
     try {
-      // Generate id
       const id = generateId(manifest.name);
       const duplicateCount = await getDuplicateCount(melvorDir, id);
       manifest = {
@@ -55,7 +81,6 @@ const handlers = {
       const modPath = getModPath(melvorDir, manifest.id);
       await ensureDir(modPath);
 
-      // TODO: Solve issue with userscript scoping? e.g. const main error
       if (content) {
         await writeFile(path.join(modPath, manifest.entryScripts[0]), content);
       } else {
@@ -74,7 +99,7 @@ const handlers = {
       return manifest;
     } catch (e) {
       console.error(e);
-      await remove(getModPath(melvorDir, manifest.id));
+      if (manifest.id) await remove(getModPath(melvorDir, manifest.id));
       return { error: 'Unable to add the selected mod.' };
     }
   },
@@ -127,7 +152,7 @@ const handlers = {
     }
   },
 
-  [mods.update]: async ({ melvorDir, id }) => {
+  [mods.update]: async ({ melvorDir, id, browserData }) => {
     try {
       const modPath = getModPath(melvorDir, id);
       const manifestPath = path.join(modPath, 'manifest.json');
@@ -135,23 +160,10 @@ const handlers = {
 
       if (!manifest.origin) return;
 
-      const { content: updatedScript } = await downloadScript(manifest.origin);
-
-      if (!updatedScript) return;
-
-      const { meta, content } = usp(updatedScript);
-      const updatedManifest = {
-        ...manifest,
-        name: (meta.name && meta.name.length) ? meta.name[0] : manifest.name,
-        description: (meta.description && meta.description.length) ? meta.description[0] : manifest.description,
-        version: (meta.version && meta.version.length) ? meta.version[0] : manifest.version,
-      };
+      if (manifest.origin === 'browser' && browserData.type === 'ext')
+        return await updateExtension(modPath, manifestPath, manifest, browserData);
       
-      const scriptPath = path.join(modPath, updatedManifest.entryScripts[0]);
-      await writeFile(scriptPath, content);
-      await writeJson(manifestPath, updatedManifest, { spaces: 2 });
-
-      return { ...updatedManifest, version: updatedManifest.version, updateAvailable: null };
+      return await updateScript(modPath, manifestPath, manifest, browserData);
     } catch (e) {
       console.error(e);
       return `Unable to update mod ${id}.`;
@@ -160,6 +172,7 @@ const handlers = {
 
   [mods.remove]: async ({ melvorDir, id }) => {
     try {
+      if (!id) return;
       const modPath = getModPath(melvorDir, id);
 
       await remove(modPath);
@@ -214,6 +227,20 @@ const parseManifest = async (content) => {
   };
 };
 
+const findManifest = async (dir) => {
+  const files = await readdir(dir, { withFileTypes: true });
+  const manifest = files.find(file => file.isFile() && file.name === 'manifest.json');
+  if (manifest) return path.join(dir, manifest.name);
+  
+  const folders = files.filter(dirent => dirent.isDirectory()).map(dirent => dirent.name);
+  for (const folder of folders) {
+    const manifest = await findManifest(path.join(dir, folder));
+    if (manifest) return manifest;
+  }
+
+  return false;
+};
+
 const generateId = name => {
   return name.replace(/[^a-z ]/gi, '').replace(/ /g, '_').toLowerCase();
 };
@@ -251,7 +278,10 @@ const downloadScript = async url => {
   if (isGreasyForkUrl(url))
     return await downloadGreasyForkScript(url);
 
-  return;
+  const scriptPath = url.split('/');
+  const scriptFile = decodeURI(scriptPath[scriptPath.length - 1]);
+  const { data } = await axios.get(url);
+  return { file: scriptFile, content: data };
 };
 
 const downloadGreasyForkScript = async url => {
@@ -268,36 +298,91 @@ const downloadGreasyForkScript = async url => {
   }
 };
 
-const getUpdates = async mod => {
+const getUpdates = async (mod) => {
   if (!mod.origin) return null;
+
+  const isGreasyForkOrigin = isGreasyForkUrl(mod.origin);
+
   // We only support Greasy Fork updates for now
-  if (!isGreasyForkUrl(mod.origin)) return null;
+  if (!isGreasyForkOrigin) return null;
 
   try {
-    const { data } = await axios.get(mod.origin);
-    const $ = cheerio.load(data);
-    const originVersion = $('#install-area .install-link').attr('data-script-version');
-    if (!originVersion) return null;
-
-    const currentVersion = mod.version.split('.');
-    const latestVersion = originVersion.split('.');
-
-    let isNewVersion = false;
-
-    for (let i = 0; i < latestVersion.length; i++) {
-      if (currentVersion.length === i || latestVersion[i] > currentVersion[i]) {
-        isNewVersion = true;
-        break;
-      }
-    }
-
-    if (isNewVersion) {
-      return originVersion;
-    }
+    if (isGreasyForkOrigin) return await getGreasyForkUpdates(mod);
   } catch (err) {
     return null;
   }
+
+  return null;
 };
+
+const getGreasyForkUpdates = async mod => {
+  const { data } = await axios.get(mod.origin);
+  const $ = cheerio.load(data);
+  const originVersion = $('#install-area .install-link').attr('data-script-version');
+  if (!originVersion) return null;
+
+  const currentVersion = mod.version.split('.');
+  const latestVersion = originVersion.split('.');
+
+  let isNewVersion = false;
+
+  for (let i = 0; i < latestVersion.length; i++) {
+    if (currentVersion.length === i || latestVersion[i] > currentVersion[i]) {
+      isNewVersion = true;
+      break;
+    }
+  }
+
+  if (isNewVersion) {
+    return originVersion;
+  }
+}
+
+const updateScript = async (modPath, manifestPath, manifest, browserData) => {
+  const { content: updatedScript } = await downloadScript(manifest.origin === 'browser' ? browserData.download : manifest.origin);
+
+  if (!updatedScript) return;
+
+  const { meta, content } = usp(updatedScript);
+  const updatedManifest = {
+    ...manifest,
+    name: (meta.name && meta.name.length) ? meta.name[0] : manifest.name,
+    description: (meta.description && meta.description.length) ? meta.description[0] : manifest.description,
+    version: (meta.version && meta.version.length) ? meta.version[0] : manifest.version,
+  };
+  
+  const scriptPath = path.join(modPath, updatedManifest.entryScripts[0]);
+  await writeFile(scriptPath, content);
+  await writeJson(manifestPath, updatedManifest, { spaces: 2 });
+  
+  return { ...updatedManifest, version: updatedManifest.version, updateAvailable: null };
+};
+
+const updateExtension = async (modPath, manifestPath, manifest, browserData) => {
+  const tempPath = path.join(app.getPath('temp'), 'M3');
+  await ensureDir(tempPath);
+  const dl = await download(BrowserWindow.getFocusedWindow(), browserData.download, { directory: tempPath });
+  const extDir = path.join(tempPath, dl.getFilename().split('.')[0]);
+  await decompress(dl.savePath, extDir);
+  const tempManifestPath = await findManifest(extDir);
+  if (!tempManifestPath) return;
+  const tempManifest = await handlers[mods.parseFile]({ filePath: tempManifestPath });
+  const updatedManifest = {
+    ...manifest,
+    name: browserData.title,
+    description: tempManifest.description,
+    version: browserData.version,
+    origin: 'browser',
+    browserId: browserData.id
+  };
+  await emptyDir(modPath);
+  await copy(path.dirname(tempManifestPath), modPath);
+  await injectModId(modPath, updatedManifest.id);
+  await writeJson(manifestPath, updatedManifest, { spaces: 2 });
+  await emptyDir(tempPath);
+
+  return { ...updatedManifest, version: updatedManifest.version, updateAvailable: null };
+}
 
 const injectModId = async (dir, modId) => {
   if (!await pathExists(dir)) return;

@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import axios from 'axios';
 
 import api from '@/api';
 import { sortModsByLoadOrder } from '@/util';
@@ -13,6 +14,7 @@ export default new Vuex.Store({
     checkForUpdates: true,
     launchMode: 'steam',
     closeOnLaunch: true,
+    browserMods: [],
     mods: [],
     modLoadOrder: [],
     disabledMods: [],
@@ -27,6 +29,9 @@ export default new Vuex.Store({
     },
     selectedModIndex ({ mods, selectedMod }) {
       return mods.map(mod => mod.id).indexOf(selectedMod);
+    },
+    installedBrowserMod ({ mods }) {
+      return (browserId) => mods.find(mod => mod.origin === 'browser' && mod.browserId === browserId);
     }
   },
   mutations: {
@@ -35,6 +40,9 @@ export default new Vuex.Store({
     },
     setDirValidity (state, isValid) {
       state.isValidDir = isValid;
+    },
+    setBrowserMods (state, mods) {
+      state.browserMods = mods;
     },
     setModLoadOrder (state, loadOrder) {
       state.modLoadOrder = loadOrder;
@@ -81,6 +89,8 @@ export default new Vuex.Store({
       const loadOrder = localStorage.getItem('modLoadOrder');
       if (loadOrder) dispatch('loadModLoadOrder', JSON.parse(loadOrder));
 
+      await dispatch('loadBrowser');
+
       const dir = localStorage.getItem('melvorDir');
       if (dir) await dispatch('setDir', dir);
     },
@@ -95,6 +105,10 @@ export default new Vuex.Store({
       } else {
         await dispatch('setMods', []);
       }
+    },
+    async loadBrowser ({ commit }) {
+      const res = await axios.get('https://cherrymace.github.io/m3-mod-browser/mods/all.json');
+      commit('setBrowserMods', res.data);
     },
     loadModLoadOrder ({ commit }, modLoadOrder) {
       commit('setModLoadOrder', modLoadOrder);
@@ -163,8 +177,15 @@ export default new Vuex.Store({
     selectMod ({ commit }, id) {
       commit('selectMod', id);
     },
-    async checkForUpdates ({ commit }, mod) {
-      const updateAvailable = await api.mods.checkForUpdates(mod);
+    async checkForUpdates ({ state, commit }, mod) {
+      let updateAvailable = null;
+
+      if (mod.origin === 'browser') {
+        const browserMod = state.browserMods.find(m => m.id === mod.browserId);
+        if (browserMod.version !== mod.version)
+          updateAvailable = browserMod.version;
+      }
+      else updateAvailable = await api.mods.checkForUpdates(mod);
       if (updateAvailable) commit('setMod', { ...mod, updateAvailable });
     },
     async updateAllMods ({ state, dispatch }) {
@@ -174,7 +195,9 @@ export default new Vuex.Store({
     },
     async updateMod ({ state, dispatch, commit }, id) {
       commit('beginUpdateMod', id);
-      await api.mods.update(state.dir, id);
+      const mod = state.mods.find(m => m.id === id);
+      const browserData = mod.origin === 'browser' ? state.browserMods.find(m => m.id === mod.browserId) : null;
+      await api.mods.update(state.dir, id, browserData);
       await dispatch('loadMod', id);
       commit('endUpdateMod');
     },
