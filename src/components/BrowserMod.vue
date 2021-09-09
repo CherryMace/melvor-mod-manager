@@ -24,9 +24,13 @@
       <version-chip :small="!featured" :version="mod.version" :targetGameVersion="mod.targetGameVersion" />
       <v-spacer />
       <v-btn plain color="info" :small="!featured" @click="openDetails">{{ featured ? 'More Details' : 'Details' }}</v-btn>
-      <v-btn color="lime darken-2" :small="!featured" :disabled="isInstalled" :loading="installing" @click="install">
-        {{ isInstalled ? 'Installed' : 'Install' }}
-        <v-icon small>{{ isInstalled ? 'done' : 'add' }}</v-icon>
+      <v-btn v-if="isOutOfDate" color="info" :small="!featured" :disabled="disabled" :loading="installing" @click="update">
+        Update
+        <v-icon small>arrow_upward</v-icon>
+      </v-btn>
+      <v-btn v-else color="lime darken-2" :small="!featured" :disabled="disabled || installedMod" :loading="installing" @click="install">
+        {{ installedMod ? 'Installed' : 'Install' }}
+        <v-icon small>{{ installedMod ? 'done' : 'add' }}</v-icon>
       </v-btn>
     </v-card-actions>
   </v-card>
@@ -39,7 +43,7 @@ import VersionChip from './VersionChip.vue';
 
 export default {
   components: { VImg, VSheet, VersionChip },
-  props: ['mod', 'feature'],
+  props: ['mod', 'feature', 'disabled'],
   data () {
     return {
       installing: false
@@ -49,8 +53,13 @@ export default {
     featured () {
       return this.feature && this.mod.featured; 
     },
-    isInstalled () {
-      return this.$store.getters.isModInstalled(this.mod.id);
+    installedMod () {
+      return this.$store.getters.installedBrowserMod(this.mod.id);
+    },
+    isOutOfDate () {
+      if (!this.installedMod) return false;
+
+      return this.installedMod.version !== this.mod.version;
     }
   },
   methods: {
@@ -59,9 +68,13 @@ export default {
     },
     async install () {
       this.installing = true;
-      console.log(this.mod);
       const installedMod = await mods.browserInstall(this.$store.state.dir, this.mod);
       await this.$store.dispatch('loadMod', installedMod.id);
+      this.installing = false;
+    },
+    async update () {
+      this.installing = true;
+      await this.$store.dispatch('updateMod', this.installedMod.id);
       this.installing = false;
     }
   }

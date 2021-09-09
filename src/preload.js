@@ -34,7 +34,7 @@ contextBridge.exposeInMainWorld('mods', {
   // Returns latest mod version or null if unable to fetch
   checkForUpdates: async (mod) => await ipcRenderer.invoke('mods', { type: mods.checkForUpdates, mod }),
   // Returns error
-  update: async (melvorDir, id) => await ipcRenderer.invoke('mods', { type: mods.update, melvorDir, id }),
+  update: async (melvorDir, id, browserData) => await ipcRenderer.invoke('mods', { type: mods.update, melvorDir, id, browserData }),
   // Returns error
   remove: async (melvorDir, id) => await ipcRenderer.invoke('mods', { type: mods.remove, melvorDir, id }),
   // Returns error

@@ -21,8 +21,8 @@ import Sidebar from './components/Sidebar.vue';
 export default {
   name: 'App',
   components: { SystemBar, Toolbar, Sidebar },
-  created () {
-    this.$store.dispatch('loadSavedState');
+  async created () {
+    await this.$store.dispatch('loadSavedState');
   }
 };
 </script>

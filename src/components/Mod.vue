@@ -4,7 +4,7 @@
       <div class="load-order d-flex align-center mr-3">
         <h3 class="text-h3 text--disabled">{{ loadOrder }}</h3>
       </div>
-      <div>
+      <div style="max-width: 75%;">
         <h4 class="title" :class="{ 'text--disabled': mod.disabled }">{{ mod.name }}</h4>
         <h5 class="caption text--secondary" :class="{ 'text--disabled': mod.disabled }" v-if="mod.description">{{ mod.description }}</h5>
       </div>
@@ -35,6 +35,7 @@ export default {
   computed: {
     source () {
       if (!this.mod.origin) return 'File';
+      if (this.mod.origin === 'browser') return 'Discover';
       if ((/^https?:\/\/(www\.)?greasyfork\.org/).test(this.mod.origin))
         return 'Greasy Fork';
       return 'Unknown';

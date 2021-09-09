@@ -28,13 +28,13 @@ export default {
     return {
       navItems: [
         {
-          title: 'Browse',
-          icon: 'search',
+          title: 'Discover',
+          icon: 'extension',
           link: '/browse'
         },
         {
           title: 'My Mods',
-          icon: 'view_list',
+          icon: 'list',
           link: '/'
         },
         {
