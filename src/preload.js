@@ -23,6 +23,8 @@ contextBridge.exposeInMainWorld('mods', {
   parseFile: async (filePath) => await ipcRenderer.invoke('mods', { type: mods.parseFile, filePath }),
   // Returns mod manifest
   parseWeb: async (url) => await ipcRenderer.invoke('mods', { type: mods.parseWeb, origin: url }),
+  // Returns mod manifest
+  browserInstall: async (melvorDir, data) => await ipcRenderer.invoke('mods', { type: mods.browserInstall, melvorDir, data }),
   // Returns error
   add: async (melvorDir, origin, manifest, content) => await ipcRenderer.invoke('mods', { type: mods.add, melvorDir, origin, manifest, content }),
   // Returns array of mod manifests

@@ -1,9 +1,12 @@
-import { pathExists, readFile, readJson, writeFile, writeJson, ensureDir, opendir, copy, remove, readdir, lstat } from 'fs-extra';
+import { pathExists, readFile, readJson, writeFile, writeJson, ensureDir, opendir, emptyDir, copy, remove, readdir, lstat } from 'fs-extra';
 import path from 'path';
+import { app, BrowserWindow } from 'electron';
 
 import axios from 'axios';
 import cheerio from 'cheerio';
 import usp from 'userscript-parser';
+import { download } from 'electron-dl';
+import decompress from 'decompress';
 
 import { isGreasyForkUrl } from './util';
 import { mods } from './messageTypes';
@@ -41,6 +44,29 @@ const handlers = {
     }
   },
 
+  [mods.browserInstall]: async ({ melvorDir, data }) => {
+    let res;
+
+    if (data.type === 'script') {
+      const { manifest, content } = await handlers[mods.parseWeb]({ origin: data.url });
+      const browserManifest = { ...manifest, name: data.title, origin: 'browser', browserId: data.id };
+      res = await handlers[mods.add]({ melvorDir, origin: data.url, manifest: browserManifest, content: content });
+    } else {
+      const tempPath = path.join(app.getPath('temp'), 'M3');
+      await ensureDir(tempPath);
+      const dl = await download(BrowserWindow.getFocusedWindow(), data.url, { directory: tempPath });
+      const extDir = path.join(tempPath, dl.getFilename().split('.')[0]);
+      await decompress(dl.savePath, extDir);
+      const manifestPath = path.join(extDir, 'manifest.json');
+      const manifest = await handlers[mods.parseFile]({ filePath: manifestPath });
+      const browserManifest = { ...manifest, name: data.title, origin: 'browser', browserId: data.id };
+      res = await handlers[mods.add]({ melvorDir, origin: manifestPath, manifest: browserManifest });
+      await emptyDir(tempPath);
+    }
+
+    return res;
+  },
+
   [mods.add]: async ({ melvorDir, origin, manifest, content }) => {
     try {
       // Generate id
@@ -55,7 +81,6 @@ const handlers = {
       const modPath = getModPath(melvorDir, manifest.id);
       await ensureDir(modPath);
 
-      // TODO: Solve issue with userscript scoping? e.g. const main error
       if (content) {
         await writeFile(path.join(modPath, manifest.entryScripts[0]), content);
       } else {
@@ -74,7 +99,7 @@ const handlers = {
       return manifest;
     } catch (e) {
       console.error(e);
-      await remove(getModPath(melvorDir, manifest.id));
+      if (manifest.id) await remove(getModPath(melvorDir, manifest.id));
       return { error: 'Unable to add the selected mod.' };
     }
   },
@@ -160,6 +185,7 @@ const handlers = {
 
   [mods.remove]: async ({ melvorDir, id }) => {
     try {
+      if (!id) return;
       const modPath = getModPath(melvorDir, id);
 
       await remove(modPath);

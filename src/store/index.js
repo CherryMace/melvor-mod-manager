@@ -27,6 +27,9 @@ export default new Vuex.Store({
     },
     selectedModIndex ({ mods, selectedMod }) {
       return mods.map(mod => mod.id).indexOf(selectedMod);
+    },
+    isModInstalled ({ mods }) {
+      return (browserId) => mods.some(mod => mod.origin === 'browser' && mod.browserId === browserId);
     }
   },
   mutations: {
