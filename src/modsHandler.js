@@ -424,7 +424,7 @@ window.addEventListener('load', () => {
   };
 
   const mods = [
-    ${modInjectables.join(',\n      ')}
+    ${modInjectables.join(',\n    ')}
   ];
   
   for (const mod of mods) {
