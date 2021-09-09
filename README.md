@@ -12,8 +12,12 @@ Download and run the setup .exe from the [Latest Release](https://github.com/Cha
 
 Once installed and launched:
 1. Click the 'Browse' button and find your Melvor Idle installation directory. It is most likely something like: `C:\Program Files (x86)\Steam\steamapps\common\Melvor Idle`
-2. Click the 'Add +' button and add a mod from either a file or a web URL.
-3. Launch the game using the button in the upper-right and your mods should be loaded upon selecting your character.
+2. Add popular mods from the curated **Discover** tab. Simply find the mod you want and click **Install**!
+3. Alternatively, you can click the **Add +** button and manually add a mod from either a file or a web URL.
+4. Launch the game using the button in the upper-right and your mods should be loaded upon selecting your character.
+
+### Add from Discover Tab
+Mods can be added from the Discover tab. This is a curated list of popular mods that have generally been tested by the community. Still, I cannot guarantee them to be working or not including malicious code - I'll do my best to inspect the code and test them, I urge you to use the **Info** button to guage the mod for yourself.
 
 ### Add From File
 Files can be either a JavaScript (.js) file formatted with UserScript metadata or a WebExtension manifest (manifest.json). This means that for extensions, you should manually download them (for example, from the Combat Simulator Reloaded's [release page](https://github.com/visua0/Melvor-Idle-Combat-Simulator-Reloaded/releases)), extract the .zip file, and then navigate the M3 file prompt to the manifest.json file found within.
@@ -22,13 +26,15 @@ Files can be either a JavaScript (.js) file formatted with UserScript metadata o
 Currently only GreasyFork userscript URLs are supported. Example: `https://greasyfork.org/en/scripts/428146-quickshards-for-melvor-idle`
 
 ### Updating Mods
-M3 currently only supports updating of mods through the UI that have been added via GreasyFork. For all other mods, you should first remove it and then re-add using the newer version. 
+M3 currently only supports updating of mods through the UI that have been added via the Discover tab or GreasyFork. For all other mods, you should first remove it and then re-add using the newer version. 
 
 ### Mod Load Order
 You can adjust the load order of the mods using the arrows on the right-hand side of the mod list. This may help in resolving dependencies in the correct order.
 
-## Screenshot
+## Screenshots
+![Screenshot of Discover Tab](repo/app-screenshot--discover.png)
 ![Screenshot of M3](repo/app-screenshot.png)
+![Screenshot of Settings Tab](repo/app-screenshot--settings.png)
 
 ## Scripts for Compiling/Running M3 Yourself
 Ensure you have [Node.js installed](https://nodejs.org/en/).
