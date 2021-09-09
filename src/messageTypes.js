@@ -1,5 +1,6 @@
 export const process = {
   launchMelvor: 'launch-melvor',
+  openLink: 'open-link',
   minimize: 'minimize',
   maximize: 'maximize',
   exit: 'exit'

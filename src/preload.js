@@ -3,6 +3,7 @@ import { contextBridge, ipcRenderer } from 'electron';
 
 contextBridge.exposeInMainWorld('process', {
   launchMelvor: async (melvorDir, launchMode) => await ipcRenderer.invoke('process', { type: process.launchMelvor, melvorDir, launchMode }),
+  openLink: async (url) => await ipcRenderer.invoke('process', { type: process.openLink, url }),
   minimize: () => ipcRenderer.invoke('process', { type: process.minimize }),
   maximize: () => ipcRenderer.invoke('process', { type: process.maximize }),
   exit: () => ipcRenderer.invoke('process', { type: process.exit })

@@ -27,6 +27,9 @@ const handlers = {
     const appId = 1267910;
     await open(`steam://run/${appId}`, { wait: true });
   },
+  [messageTypes.process.openLink]: async ({ url }) => {
+    open(url);
+  },
   [messageTypes.process.minimize]: async () => {
     BrowserWindow.getFocusedWindow().minimize();
   },
