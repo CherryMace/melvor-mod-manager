@@ -2,7 +2,7 @@
   "name": "melvor-mod-manager",
   "version": "0.3.0",
   "private": true,
-  "description": "Melvor Mod Manager (M3) enables you to quickly inject userscripts or browser extensions into the Steam edition of Melvor Idle.",
+  "description": "Melvor Mod Manager (M3)",
   "author": {
     "name": "Chase Strackbein",
     "email": "chase@gcherrymace.com"
