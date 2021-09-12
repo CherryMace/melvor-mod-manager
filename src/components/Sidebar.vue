@@ -9,11 +9,15 @@
       <v-list-item-group color="teal lighten-2">
 
         <v-list-item v-for="item in navItems" :key="item.title" link :to="item.link">
-          <v-list-item-icon>
-            <v-icon>{{ item.icon }}</v-icon>
+          <v-list-item-icon class="mr-6">
+            <v-icon :color="item.color">{{ item.icon }}</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
-            <v-list-item-title>{{ item.title }}</v-list-item-title>
+              <v-list-item-title style="overflow:visible;">
+                <v-badge inline class="mt-0" :value="!!item.badge" :content="item.badge" dot :color="item.badgeColor || 'primary'">
+                  {{ item.title }}
+                </v-badge>
+              </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
 
@@ -24,9 +28,9 @@
 
 <script>
 export default {
-  data () {
-    return {
-      navItems: [
+  computed: {
+    navItems () {
+      return [
         {
           title: 'Discover',
           icon: 'extension',
@@ -35,14 +39,16 @@ export default {
         {
           title: 'My Mods',
           icon: 'list',
-          link: '/'
+          link: '/',
+          badge: this.$store.state.mods.some(mod => mod.updateAvailable),
+          badgeColor: 'lime accent-4'
         },
         {
           title: 'Settings',
           icon: 'settings',
           link: '/settings'
         }
-      ]
+      ];
     }
   }
 }
