@@ -6,7 +6,8 @@ contextBridge.exposeInMainWorld('process', {
   openLink: async (url) => await ipcRenderer.invoke('process', { type: process.openLink, url }),
   minimize: () => ipcRenderer.invoke('process', { type: process.minimize }),
   maximize: () => ipcRenderer.invoke('process', { type: process.maximize }),
-  exit: () => ipcRenderer.invoke('process', { type: process.exit })
+  exit: () => ipcRenderer.invoke('process', { type: process.exit }),
+  getPlatform: () => ipcRenderer.invoke('process', { type: process.getPlatform })
 });
 
 contextBridge.exposeInMainWorld('file', {
@@ -24,19 +25,19 @@ contextBridge.exposeInMainWorld('mods', {
   // Returns mod manifest
   parseWeb: async (url) => await ipcRenderer.invoke('mods', { type: mods.parseWeb, origin: url }),
   // Returns mod manifest
-  browserInstall: async (melvorDir, data) => await ipcRenderer.invoke('mods', { type: mods.browserInstall, melvorDir, data }),
+  browserInstall: async (packageDir, data) => await ipcRenderer.invoke('mods', { type: mods.browserInstall, packageDir, data }),
   // Returns error
-  add: async (melvorDir, origin, manifest, content) => await ipcRenderer.invoke('mods', { type: mods.add, melvorDir, origin, manifest, content }),
+  add: async (packageDir, origin, manifest, content) => await ipcRenderer.invoke('mods', { type: mods.add, packageDir, origin, manifest, content }),
   // Returns array of mod manifests
-  loadAll: async (melvorDir) => await ipcRenderer.invoke('mods', { type: mods.loadAll, melvorDir }),
+  loadAll: async (packageDir) => await ipcRenderer.invoke('mods', { type: mods.loadAll, packageDir }),
   // Returns mod manifest
-  load: async (melvorDir, id) => await ipcRenderer.invoke('mods', { type: mods.load, melvorDir, id }),
+  load: async (packageDir, id) => await ipcRenderer.invoke('mods', { type: mods.load, packageDir, id }),
   // Returns latest mod version or null if unable to fetch
   checkForUpdates: async (mod) => await ipcRenderer.invoke('mods', { type: mods.checkForUpdates, mod }),
   // Returns error
-  update: async (melvorDir, id, browserData) => await ipcRenderer.invoke('mods', { type: mods.update, melvorDir, id, browserData }),
+  update: async (packageDir, id, browserData) => await ipcRenderer.invoke('mods', { type: mods.update, packageDir, id, browserData }),
   // Returns error
-  remove: async (melvorDir, id) => await ipcRenderer.invoke('mods', { type: mods.remove, melvorDir, id }),
+  remove: async (packageDir, id) => await ipcRenderer.invoke('mods', { type: mods.remove, packageDir, id }),
   // Returns error
-  inject: async (melvorDir, modsToInject) => await ipcRenderer.invoke('mods', { type: mods.inject, melvorDir, mods: modsToInject })
+  inject: async (packageDir, modsToInject) => await ipcRenderer.invoke('mods', { type: mods.inject, packageDir, mods: modsToInject })
 });

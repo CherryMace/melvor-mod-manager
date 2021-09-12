@@ -18,3 +18,8 @@ export const sortModsByLoadOrder = (mods, modLoadOrder) => {
 export const isGreasyForkUrl = url => {
   return (/^https?:\/\/(www\.)?greasyfork\.org/).test(url);
 };
+
+export const getExecutableFilename = (platform) => ({
+	win32: 'Melvor Idle.exe',
+	darwin: 'Melvor Idle.app',
+}[platform]);

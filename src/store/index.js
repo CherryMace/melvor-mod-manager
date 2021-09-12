@@ -10,6 +10,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     dir: '',
+    packageDir: '',
     isValidDir: false,
     checkForUpdates: true,
     launchMode: 'steam',
@@ -37,6 +38,9 @@ export default new Vuex.Store({
   mutations: {
     setDir (state, dir) {
       state.dir = dir;
+    },
+    setPackageDir (state, packageDir) {
+      state.packageDir = packageDir;
     },
     setDirValidity (state, isValid) {
       state.isValidDir = isValid;
@@ -98,8 +102,15 @@ export default new Vuex.Store({
       const isValidDir = await api.file.validateMelvorDir(dir);
       if (!isValidDir) dir = 'Invalid Directory';
       commit('setDir', dir);
+      let packageDir = dir;
+      const platform = await api.process.getPlatform();
+      if (platform === 'darwin') {
+        packageDir = `${dir}/Melvor Idle.app/Contents/Resources/app.nw`;
+      }
       commit('setDirValidity', isValidDir);
+      commit('setPackageDir', packageDir);
       if (isValidDir) {
+        localStorage.setItem('packageDir', packageDir);
         localStorage.setItem('melvorDir', dir);
         await dispatch('loadMods');
       } else {
@@ -122,11 +133,11 @@ export default new Vuex.Store({
       commit('setMods', mods);
       if (!mods.length) return;
       dispatch('saveModLoadOrder');
-      await api.mods.inject(state.dir, mods);
+      await api.mods.inject(state.packageDir, mods);
     },
     async loadMods ({ state, commit, dispatch }) {
       commit('setLoadModsState', true);
-      const mods = await api.mods.loadAll(state.dir);
+      const mods = await api.mods.loadAll(state.packageDir);
       commit('setLoadModsState', false);
       const modsWithDisabledFlag = mods.map(mod => ({ ...mod, disabled: state.disabledMods.includes(mod.id) }));
       const modsOrderedByLoadOrder = sortModsByLoadOrder(modsWithDisabledFlag, state.modLoadOrder);
@@ -140,7 +151,7 @@ export default new Vuex.Store({
     },
     async loadMod ({ state, commit, dispatch }, id) {
       commit('setLoadModsState', true);
-      const modToLoad = await api.mods.load(state.dir, id);
+      const modToLoad = await api.mods.load(state.packageDir, id);
       commit('setLoadModsState', false);
       if (!modToLoad) return;
 
@@ -197,12 +208,12 @@ export default new Vuex.Store({
       commit('beginUpdateMod', id);
       const mod = state.mods.find(m => m.id === id);
       const browserData = mod.origin === 'browser' ? state.browserMods.find(m => m.id === mod.browserId) : null;
-      await api.mods.update(state.dir, id, browserData);
+      await api.mods.update(state.packageDir, id, browserData);
       await dispatch('loadMod', id);
       commit('endUpdateMod');
     },
     async removeMod ({ state, dispatch }, id) {
-      await api.mods.remove(state.dir, id);
+      await api.mods.remove(state.packageDir, id);
       const mods = state.mods.filter(mod => mod.id !== id);
       await dispatch('setMods', mods);
     },

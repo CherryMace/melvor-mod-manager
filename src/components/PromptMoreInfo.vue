@@ -37,7 +37,7 @@ export default {
       if (!this.name) return;
 
       this.loading = true;
-      const mod = await mods.add(this.$store.state.dir, this.data.origin, { ...this.data.manifest, name: this.name }, this.data.content);
+      const mod = await mods.add(this.$store.state.packageDir, this.data.origin, { ...this.data.manifest, name: this.name }, this.data.content);
       if (mod.error) {
         this.error = mod.error;
         this.loading = false;

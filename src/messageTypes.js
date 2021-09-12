@@ -3,7 +3,8 @@ export const process = {
   openLink: 'open-link',
   minimize: 'minimize',
   maximize: 'maximize',
-  exit: 'exit'
+  exit: 'exit',
+  getPlatform: 'get-platform',
 };
 
 export const file = {

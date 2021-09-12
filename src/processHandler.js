@@ -3,7 +3,7 @@ import path from 'path';
 import { BrowserWindow } from 'electron';
 
 import open from 'open';
-
+import { getExecutableFilename } from './util'
 import messageTypes from './messageTypes';
 
 export default async (_event, message) => {
@@ -13,7 +13,7 @@ export default async (_event, message) => {
 const handlers = {
   [messageTypes.process.launchMelvor]: async ({ melvorDir, launchMode }) => {
     if (launchMode === 'exe') {
-      const exePath = path.join(melvorDir, 'Melvor Idle.exe');
+      const exePath = path.join(melvorDir, getExecutableFilename(process.platform));
 
       const subprocess = cp.spawn(exePath, {
         detached: true,
@@ -40,5 +40,6 @@ const handlers = {
   },
   [messageTypes.process.exit]: async () => {
     process.exit();
-  }
+  },
+  [messageTypes.process.getPlatform]: () => process.platform
 };
