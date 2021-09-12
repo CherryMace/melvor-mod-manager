@@ -1,7 +1,7 @@
 <template>
   <div class="d-flex" style="width:100%">
     <div @dblclick="promptDirectory" class="flex-grow-1">
-      <v-text-field class="squared-text-field ellipses" flat solo tile dense disabled single-line v-model="dir" hide-details>
+      <v-text-field class="squared-text-field ellipses" placeholder="Select your Melvor Idle installation directory..." flat solo tile dense disabled single-line v-model="dir" hide-details>
         <template v-slot:prepend-inner>
           <v-icon :color="display[result].color">{{ display[result].icon }}</v-icon>
         </template>

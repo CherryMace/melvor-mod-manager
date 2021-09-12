@@ -5,9 +5,12 @@
     <v-overlay absolute :value="$store.state.isLoadingMods">
       <v-progress-circular indeterminate />
     </v-overlay>
-    <mod-list v-if="$store.state.mods.length" class="flex-grow-1" :disabled="disabled" />
+    <div v-if="disabled" class="flex-grow-1 d-flex align-center justify-center">
+      <v-icon color="grey" class="mr-2">arrow_upward</v-icon><span class="caption text--disabled">Select your Melvor Idle installation directory above to get started</span>
+    </div>
+    <mod-list v-else-if="$store.state.mods.length" class="flex-grow-1" :disabled="disabled" />
     <div v-else class="flex-grow-1 d-flex align-center justify-center">
-      <span class="caption text--disabled">No mods loaded</span>
+      <span class="caption text--disabled">No mods loaded. Install some from the <router-link to="/browse">Discover</router-link> tab or add them manually above.</span>
     </div>
   </v-container>
 </template>
