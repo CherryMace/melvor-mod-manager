@@ -53,7 +53,7 @@ export default {
         return;
       }
       if (res.manifest.name) {
-        const mod = await mods.add(this.$store.state.dir, this.url, res.manifest, res.content);
+        const mod = await mods.add(this.$store.state.packageDir, this.url, res.manifest, res.content);
         if (mod.error) {
           this.error = mod.error;
           this.loading = false;

@@ -68,7 +68,7 @@ export default {
     },
     async install () {
       this.installing = true;
-      const installedMod = await mods.browserInstall(this.$store.state.dir, this.mod);
+      const installedMod = await mods.browserInstall(this.$store.state.packageDir, this.mod);
       await this.$store.dispatch('loadMod', installedMod.id);
       this.installing = false;
     },

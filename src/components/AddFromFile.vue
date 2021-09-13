@@ -59,7 +59,7 @@ export default {
         return;
       }
       if (manifest.name) {
-        const mod = await mods.add(this.$store.state.dir, this.file, manifest);
+        const mod = await mods.add(this.$store.state.packageDir, this.file, manifest);
         if (mod.error) {
           this.error = mod.error;
           this.loading = false;

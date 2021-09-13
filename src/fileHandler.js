@@ -1,7 +1,7 @@
 import { dialog } from 'electron';
 import { access } from 'fs/promises';
 import path from 'path';
-
+import { getExecutableFilename } from './util'
 import { file } from './messageTypes';
 
 export default async (_event, message) => {
@@ -29,8 +29,8 @@ const handlers = {
   },
 
   [file.validateMelvorDir]: async ({ dir }) => {
-    // Validate that Melvor Idle.exe exists in dir
-    const melvorPath = path.join(dir, 'Melvor Idle.exe');
+    // Validate the executable exists in dir
+    const melvorPath = path.join(dir, getExecutableFilename(process.platform));
     try {
       await access(melvorPath);
       return true;

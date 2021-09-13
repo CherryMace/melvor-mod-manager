@@ -44,13 +44,13 @@ const handlers = {
     }
   },
 
-  [mods.browserInstall]: async ({ melvorDir, data }) => {
+  [mods.browserInstall]: async ({ packageDir, data }) => {
     let res;
 
     if (data.type === 'script') {
       const { manifest, content } = await handlers[mods.parseWeb]({ origin: data.download, fromBrowser: true });
       const browserManifest = { ...manifest, name: data.title, origin: 'browser', browserId: data.id };
-      res = await handlers[mods.add]({ melvorDir, origin: data.url, manifest: browserManifest, content: content });
+      res = await handlers[mods.add]({ packageDir, origin: data.url, manifest: browserManifest, content: content });
     } else {
       const tempPath = path.join(app.getPath('temp'), 'M3');
       await ensureDir(tempPath);
@@ -61,24 +61,24 @@ const handlers = {
       if (!manifestPath) return;
       const manifest = await handlers[mods.parseFile]({ filePath: manifestPath });
       const browserManifest = { ...manifest, name: data.title, origin: 'browser', browserId: data.id };
-      res = await handlers[mods.add]({ melvorDir, origin: manifestPath, manifest: browserManifest });
+      res = await handlers[mods.add]({ packageDir, origin: manifestPath, manifest: browserManifest });
       await emptyDir(tempPath);
     }
 
     return res;
   },
 
-  [mods.add]: async ({ melvorDir, origin, manifest, content }) => {
+  [mods.add]: async ({ packageDir, origin, manifest, content }) => {
     try {
       const id = generateId(manifest.name);
-      const duplicateCount = await getDuplicateCount(melvorDir, id);
+      const duplicateCount = await getDuplicateCount(packageDir, id);
       manifest = {
         ...manifest,
         id: (duplicateCount > 0) ? `${id}_${duplicateCount}` : id,
         name: (duplicateCount > 0) ? `${manifest.name} (${duplicateCount})` : manifest.name
       };
 
-      const modPath = getModPath(melvorDir, manifest.id);
+      const modPath = getModPath(packageDir, manifest.id);
       await ensureDir(modPath);
 
       if (content) {
@@ -99,14 +99,14 @@ const handlers = {
       return manifest;
     } catch (e) {
       console.error(e);
-      if (manifest.id) await remove(getModPath(melvorDir, manifest.id));
+      if (manifest.id) await remove(getModPath(packageDir, manifest.id));
       return { error: 'Unable to add the selected mod.' };
     }
   },
 
-  [mods.loadAll]: async ({ melvorDir }) => {
+  [mods.loadAll]: async ({ packageDir }) => {
     try {
-      const modPath = getModPath(melvorDir);
+      const modPath = getModPath(packageDir);
       if (!await pathExists(modPath)) return [];
       const loadedMods = [];
 
@@ -132,9 +132,9 @@ const handlers = {
     }
   },
 
-  [mods.load]: async ({ melvorDir, id }) => {
+  [mods.load]: async ({ packageDir, id }) => {
     try {
-      const modPath = getModPath(melvorDir, id);
+      const modPath = getModPath(packageDir, id);
       const manifest = await readJson(path.join(modPath, 'manifest.json'));
       return manifest;
     } catch (e) {
@@ -152,9 +152,9 @@ const handlers = {
     }
   },
 
-  [mods.update]: async ({ melvorDir, id, browserData }) => {
+  [mods.update]: async ({ packageDir, id, browserData }) => {
     try {
-      const modPath = getModPath(melvorDir, id);
+      const modPath = getModPath(packageDir, id);
       const manifestPath = path.join(modPath, 'manifest.json');
       const manifest = await readJson(manifestPath);
 
@@ -170,10 +170,10 @@ const handlers = {
     }
   },
 
-  [mods.remove]: async ({ melvorDir, id }) => {
+  [mods.remove]: async ({ packageDir, id }) => {
     try {
       if (!id) return;
-      const modPath = getModPath(melvorDir, id);
+      const modPath = getModPath(packageDir, id);
 
       await remove(modPath);
     } catch (e) {
@@ -182,12 +182,12 @@ const handlers = {
     }
   },
 
-  [mods.inject]: async ({ melvorDir, mods }) => {
-    const m3jsPath = path.join(melvorDir, 'm3.js');
+  [mods.inject]: async ({ packageDir, mods }) => {
+    const m3jsPath = path.join(packageDir, 'm3.js');
     const m3js = buildM3Js(mods);
     await writeFile(m3jsPath, m3js);
 
-    const melvorPackagePath = path.join(melvorDir, 'package.json');
+    const melvorPackagePath = path.join(packageDir, 'package.json');
     const melvorPackage = await readJson(melvorPackagePath);
     melvorPackage['inject_js_end'] = 'm3.js';
     await writeJson(melvorPackagePath, melvorPackage);
@@ -245,19 +245,19 @@ const generateId = name => {
   return name.replace(/[^a-z ]/gi, '').replace(/ /g, '_').toLowerCase();
 };
 
-const getModPath = (melvorDir, modId) => {
-  const baseModPath = path.join(melvorDir, 'Mods');
+const getModPath = (packageDir, modId) => {
+  const baseModPath = path.join(packageDir, 'Mods');
 
   if (modId) return path.join(baseModPath, modId);
 
   return baseModPath;
 };
 
-const getDuplicateCount = async (melvorDir, baseId) => {
+const getDuplicateCount = async (packageDir, baseId) => {
   let testId = baseId;
   let duplicateCount = 0;
 
-  while (await pathExists(getModPath(melvorDir, testId))) {
+  while (await pathExists(getModPath(packageDir, testId))) {
     duplicateCount++;
     testId = `${baseId}_${duplicateCount}`;
   }
