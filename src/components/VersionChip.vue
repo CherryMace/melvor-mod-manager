@@ -2,7 +2,7 @@
   <v-tooltip bottom :disabled="upToDate" max-width="250px">
     <template v-slot:activator="{ attrs, on }">
       <v-chip outlined :small="small"
-        :color="`${targetGameVersion === gameVersion ? 'lime' : 'orange' } accent-4`"
+        :color="`${upToDate ? 'lime' : 'orange' } accent-4`"
         class="ml-2"
         v-bind="attrs"
         v-on="on">
@@ -16,14 +16,9 @@
 <script>
 export default {
   props: ['version', 'targetGameVersion', 'small'],
-  data () {
-    return {
-      gameVersion: '0.21'
-    };
-  },
   computed: {
     upToDate () {
-      return this.targetGameVersion === this.gameVersion;
+      return this.targetGameVersion === this.$store.state.gameVersion;
     }
   }
 }

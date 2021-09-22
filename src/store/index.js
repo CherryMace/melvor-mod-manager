@@ -15,6 +15,7 @@ export default new Vuex.Store({
     checkForUpdates: true,
     launchMode: 'steam',
     closeOnLaunch: true,
+    gameVersion: '0.21',
     browserMods: [],
     mods: [],
     modLoadOrder: [],
@@ -44,6 +45,9 @@ export default new Vuex.Store({
     },
     setDirValidity (state, isValid) {
       state.isValidDir = isValid;
+    },
+    setGameVersion (state, version) {
+      state.gameVersion = version;
     },
     setBrowserMods (state, mods) {
       state.browserMods = mods;
@@ -93,6 +97,7 @@ export default new Vuex.Store({
       const loadOrder = localStorage.getItem('modLoadOrder');
       if (loadOrder) dispatch('loadModLoadOrder', JSON.parse(loadOrder));
 
+      await dispatch('loadGameMetadata');
       await dispatch('loadBrowser');
 
       const dir = localStorage.getItem('melvorDir');
@@ -116,6 +121,10 @@ export default new Vuex.Store({
       } else {
         await dispatch('setMods', []);
       }
+    },
+    async loadGameMetadata({ commit }) {
+      const res = await axios.get('https://cherrymace.github.io/m3-mod-browser/game.json');
+      commit('setGameVersion', res.data.version);
     },
     async loadBrowser ({ commit }) {
       const res = await axios.get('https://cherrymace.github.io/m3-mod-browser/mods/all.json');
