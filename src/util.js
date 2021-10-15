@@ -22,4 +22,5 @@ export const isGreasyForkUrl = url => {
 export const getExecutableFilename = (platform) => ({
 	win32: 'Melvor Idle.exe',
 	darwin: 'Melvor Idle.app',
+	linux: 'Melvor Idle',
 }[platform]);
