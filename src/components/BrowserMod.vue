@@ -3,7 +3,7 @@
 
     <component v-if="featured" :is="mod.featuredImage ? 'v-img' : 'v-sheet'" :height="mod.featured === 'main' ? '125px' : '82px'" :src="mod.featuredImage" :color="`${mod.featuredColor} darken-3`">
       <v-card-title>
-        <v-avatar size="48" color="transparent">
+        <v-avatar size="48" color="transparent" tile>
           <v-img v-if="mod.icon" :src="mod.icon"></v-img>
         </v-avatar>
         <span class="ml-3">{{ mod.title }}</span>
