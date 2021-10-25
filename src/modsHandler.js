@@ -39,7 +39,7 @@ const handlers = {
       const manifest = await parseScript(script.file, script.content);
       return { manifest: { ...manifest, origin }, content: script.content };
     } catch (e) {
-      console.log(e);
+      console.error(e);
       return { error: 'Unable to parse the selected script.' };
     }
   },
@@ -269,7 +269,7 @@ const isWebOrigin = origin => {
   try {
     const url = new URL(origin);
     return (/https?/).test(url.protocol);
-  } catch (e) {
+  } catch {
     return false;
   }
 };
@@ -293,7 +293,8 @@ const downloadGreasyForkScript = async url => {
     const scriptFile = decodeURI(scriptPath[scriptPath.length - 1]);
     const { data } = await axios.get(`https://greasyfork.org${scriptUrl}`);
     return { file: scriptFile, content: data };
-  } catch {
+  } catch (e) {
+    console.error(e);
     return;
   }
 };
@@ -308,7 +309,8 @@ const getUpdates = async (mod) => {
 
   try {
     if (isGreasyForkOrigin) return await getGreasyForkUpdates(mod);
-  } catch (err) {
+  } catch (e) {
+    console.error(e);
     return null;
   }
 
@@ -430,11 +432,12 @@ window.addEventListener('load', () => {
   for (const mod of mods) {
     for (const script of mod.scripts) {
       const filePath = path.join('Mods', mod.id, script);
-      fs.readFile(filePath, 'utf8', (err, content) => {
+      try {
+        const content = fs.readFileSync(filePath, 'utf8');
         const scriptEl = document.createElement('script');
         scriptEl.innerHTML = \`(() => { \${content} })();\`;
         document.body.appendChild(scriptEl);
-      });
+      } catch {}
     }
     for (const style of mod.styles) {
       const filePath = path.join('Mods', mod.id, style);
