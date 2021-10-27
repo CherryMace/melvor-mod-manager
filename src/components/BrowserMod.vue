@@ -14,7 +14,7 @@
     <v-card-actions>
 
       <v-card-title v-if="!featured" class="pa-0">
-        <v-avatar size="36" color="transparent">
+        <v-avatar size="36" color="transparent" tile>
           <v-img v-if="mod.icon" :src="mod.icon"></v-img>
         </v-avatar>
         <span class="ml-3 text-subtitle-2">{{ mod.title }}</span>
