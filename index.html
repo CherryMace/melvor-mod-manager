@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/brands.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Open+Sans&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet"> 
     <link href="m3.css" rel="stylesheet">
     <link rel="icon" href="assets/img/favicon.ico">
 
@@ -24,21 +24,33 @@
       <main class="container col-xxl-8 px-4 py-5 text-start">
         <div class="row align-items-center g-5 py-5">
           <div class="col-lg-6">
-            <h1 class="display-5 fw-bold lh-1 mb-3">Melvor Mod Manager</h1>
-            <p class="lead">The mod management solution for Melvor Idle</p>
+            <div class="mb-2 d-flex align-items-center">
+              <img src="assets/brand/m3-logo-lg.png" alt="Melvor Mod Manager Logo" class="d-none d-md-block me-4" height="150" width="150">
+              <img src="assets/brand/m3-logo.png" alt="Melvor Mod Manager Logo" class="d-block d-md-none me-4" height="100" width="100">
+              <h1 class="display-5 fw-bold lh-1 mt-2">Melvor<br />Mod<br />Manager</h1>
+            </div>
+            <p class="lead">The (unofficial) mod management solution for Melvor Idle</p>
             <div class="d-grid gap-2 d-md-flex justify-content-md-start">
-              <a href="https://github.com/CherryMace/melvor-mod-manager/releases/download/v0.3.5/Melvor-Mod-Manager-Setup-0.3.5.exe" role="button" class="btn btn-primary btn-lg px-4 me-md-2"><i class="fab fa-windows me-2"></i>Download</a>
-              <a href="https://github.com/CherryMace/melvor-mod-manager" role="button" class="btn btn-outline-secondary btn-lg px-4"><i class="fab fa-github me-2"></i>View on GitHub</a>
+              <a href="https://github.com/CherryMace/melvor-mod-manager/releases/download/v0.3.5/Melvor-Mod-Manager-Setup-0.3.5.exe" role="button" class="btn btn-primary btn-lg px-4 me-md-2 d-flex align-items-center justify-content-center">
+                <i class="fab fa-windows fa-lg me-3"></i>
+                <div>
+                  Download
+                  <small>v0.3.5</small>
+                </div>
+              </a>
+              <a href="https://github.com/CherryMace/melvor-mod-manager/blob/master/README.md#use" role="button" class="btn btn-outline-light btn-lg px-4 d-flex align-items-center justify-content-center">
+                Getting Started
+              </a>
             </div>
           </div>
           <div class="col-10 col-sm-8 col-lg-6">
             <div class="carousel slide shadow-lg" data-bs-ride="carousel">
               <div class="carousel-inner">
                 <div class="carousel-item active">
-                  <img src="assets/img/m3-modlist.png" class="d-block w-100" alt="Screenshot of the mod list">
+                  <img src="assets/img/m3-modlist.png" class="d-block w-100 rounded" alt="Screenshot of the mod list">
                 </div>
                 <div class="carousel-item">
-                  <img src="assets/img/m3-discover.png" class="d-block w-100" alt="Screenshot of the Discover tab">
+                  <img src="assets/img/m3-discover.png" class="d-block w-100 rounded" alt="Screenshot of the Discover tab">
                 </div>
               </div>
             </div>
@@ -47,7 +59,7 @@
       </main>
     
       <footer class="mt-auto text-white-50">
-        <p>v0.3.5</p>
+        <p>View it on <a href="https://github.com/CherryMace/melvor-mod-manager" class="text-white text-decoration-none"><i class="fab fa-github mx-1"></i>GitHub</a></p>
       </footer>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>

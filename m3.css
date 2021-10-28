@@ -1,12 +1,10 @@
-.btn-secondary,
-.btn-secondary:hover,
-.btn-secondary:focus {
-  color: #333;
+.btn {
   text-shadow: none;
 }
 
 body {
   background-color: #1f2f42;
+  background: url('assets/img/pattern.png') repeat;
   text-shadow: 0 .05rem .1rem rgba(0, 0, 0, .5);
   box-shadow: inset 0 0 5rem rgba(0, 0, 0, .5);
 }
@@ -26,4 +24,9 @@ h1 {
 
 .carousel:hover button:focus, .carousel:hover button:hover {
   opacity: 0.9;
+}
+
+a.btn small {
+  display: block;
+  font-size: 0.75rem;
 }
