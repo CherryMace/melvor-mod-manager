@@ -14,6 +14,10 @@ h1 {
   font-family: 'Bungee', cursive;
 }
 
+.carousel {
+  box-shadow:  1rem 3rem rgba(0,0,0,.50);
+}
+
 .carousel button {
   opacity: 0;
 }
