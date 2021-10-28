@@ -15,7 +15,7 @@ h1 {
 }
 
 .carousel {
-  box-shadow:  1rem 3rem rgba(0,0,0,.50);
+  box-shadow: 0 1rem 3rem rgba(0,0,0,.50);
 }
 
 .carousel button {
