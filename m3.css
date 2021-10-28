@@ -1,0 +1,29 @@
+.btn-secondary,
+.btn-secondary:hover,
+.btn-secondary:focus {
+  color: #333;
+  text-shadow: none;
+}
+
+body {
+  background-color: #1f2f42;
+  text-shadow: 0 .05rem .1rem rgba(0, 0, 0, .5);
+  box-shadow: inset 0 0 5rem rgba(0, 0, 0, .5);
+}
+
+h1 {
+  color: #aeea00;
+  font-family: 'Bungee', cursive;
+}
+
+.carousel button {
+  opacity: 0;
+}
+
+.carousel:hover button {
+  opacity: 0.5;
+}
+
+.carousel:hover button:focus, .carousel:hover button:hover {
+  opacity: 0.9;
+}

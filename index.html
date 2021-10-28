@@ -1,15 +1,55 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="h-100">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/fontawesome.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/brands.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Open+Sans&display=swap" rel="stylesheet">
+    <link href="m3.css" rel="stylesheet">
+    <link rel="icon" href="assets/img/favicon.ico">
 
     <title>Melvor Mod Manager</title>
   </head>
-  <body>
-    <h1>Melvor Mod Manager</h1>
+  <body class="d-flex h-100 text-center text-white">
+    
+    <div class="d-flex w-100 h-100 p-3 mx-auto flex-column">
+      
+      <header class="mb-auto"></header>
+
+      <main class="container col-xxl-8 px-4 py-5 text-start">
+        <div class="row align-items-center g-5 py-5">
+          <div class="col-lg-6">
+            <h1 class="display-5 fw-bold lh-1 mb-3">Melvor Mod Manager</h1>
+            <p class="lead">The mod management solution for Melvor Idle</p>
+            <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+              <a href="https://github.com/CherryMace/melvor-mod-manager/releases/download/v0.3.5/Melvor-Mod-Manager-Setup-0.3.5.exe" role="button" class="btn btn-primary btn-lg px-4 me-md-2"><i class="fab fa-windows me-2"></i>Download</a>
+              <a href="https://github.com/CherryMace/melvor-mod-manager" role="button" class="btn btn-outline-secondary btn-lg px-4"><i class="fab fa-github me-2"></i>View on GitHub</a>
+            </div>
+          </div>
+          <div class="col-10 col-sm-8 col-lg-6">
+            <div class="carousel slide shadow-lg" data-bs-ride="carousel">
+              <div class="carousel-inner">
+                <div class="carousel-item active">
+                  <img src="assets/img/m3-modlist.png" class="d-block w-100" alt="Screenshot of the mod list">
+                </div>
+                <div class="carousel-item">
+                  <img src="assets/img/m3-discover.png" class="d-block w-100" alt="Screenshot of the Discover tab">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    
+      <footer class="mt-auto text-white-50">
+        <p>v0.3.5</p>
+      </footer>
+    </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
   </body>
 </html>
