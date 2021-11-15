@@ -3,7 +3,7 @@
 Melvor Mod Manager (M3) allows you to quickly add userscripts and browser extensions as mods to the Steam edition of Melvor Idle.
 
 ## Installation
-Download and run the setup .exe from the [Latest Release](https://github.com/ChaseStrackbein/melvor-mod-manager/releases/latest). You will likely receive a warning that the publisher is unknown - I do not have a code signing certificate so make sure you only download [releases from GitHub](https://github.com/ChaseStrackbein/melvor-mod-manager/releases) or [compile the code yourself](https://github.com/ChaseStrackbein/melvor-mod-manager/#scripts-for-compilingrunning-m3-yourself).
+Download and run the setup .exe from the [Latest Release](https://github.com/ChaseStrackbein/melvor-mod-manager/releases/latest). You will likely receive a warning that the publisher is unknown - I do not have a code signing certificate so make sure you only download [releases from GitHub](https://github.com/ChaseStrackbein/melvor-mod-manager/releases) or [compile the code yourself](https://github.com/ChaseStrackbein/melvor-mod-manager/#steps-for-compiling-m3-yourself).
 
 ## Use
 **!!! Only add scripts or extensions that you trust !!!**
@@ -36,15 +36,19 @@ You can adjust the load order of the mods using the arrows on the right-hand sid
 ![Screenshot of M3](repo/app-screenshot.png)
 ![Screenshot of Settings Tab](repo/app-screenshot--settings.png)
 
-## Scripts for Compiling/Running M3 Yourself
-Ensure you have [Node.js installed](https://nodejs.org/en/).
-
-Start a dev instance: `npm run electron:serve`
-
-Package into an executable: `npm run electron:build`
+## Steps for Compiling M3 Yourself
+For now, in order to use M3 on MacOS or Linux, you must build the application yourself. You may also choose to do this on Windows.
+1. Download and install [Node.js](https://nodejs.org/en/)
+2. Download the M3 source code from the [latest release](https://github.com/CherryMace/melvor-mod-manager/releases/tag/v0.3.6) and unzip it.
+3. Open the directory in your choice of terminal/command prompt.
+4. Install dependencies using `npm install`. This may take several minutes.
+5. Package into an executable using `npm run electron:build`.
+6. The resulting application that may be installed should be available within `dist_electron`.
 
 ## License
 MIT
 
 ## Submitting Feedback or Contributing
 Feel free to [create an issue here on GitHub](https://github.com/ChaseStrackbein/melvor-mod-manager/issues) or reach out to me on Discord @ Buttchouda#3950.
+
+To develop locally, ensure you have [Node.js](https://nodejs.org/en/) installed, install dependencies using `npm install`, and start a dev instance using `npm run electron:serve`.
