@@ -30,7 +30,7 @@
                     <v-icon v-bind="attrs" v-on="on" color="grey darken-1">help_outline</v-icon>
                   </template>
                   <p><strong class="lime--text">Using Steam:</strong> Launch Melvor Idle as if it's being launched through Steam. This enables achievements. <em>(Recommended)</em></p>
-                  <p class="mb-0"><strong class="lime--text">Using Melvor Idle.exe:</strong> Launches Melvor directly through the executable, which won't directly integrate with Steam. Primarily useful if you have modified Steam launch options for Melvor Idle to launch M3 instead.</p>
+                  <p class="mb-0"><strong class="lime--text">Using Melvor Idle.exe:</strong> Launches Melvor directly through the executable. Primarily useful if you have modified Steam launch options for Melvor Idle to launch M3 instead.</p>
                 </v-tooltip>
               </div>
             </template>
