@@ -1,6 +1,6 @@
 import cp from 'child_process';
 import path from 'path';
-import { BrowserWindow } from 'electron';
+import { BrowserWindow, app } from 'electron';
 
 import open from 'open';
 import { getExecutableFilename } from './util'
@@ -27,19 +27,24 @@ const handlers = {
     const appId = 1267910;
     await open(`steam://run/${appId}`, { wait: true });
   },
-  [messageTypes.process.openLink]: async ({ url }) => {
+
+  [messageTypes.process.openLink]: ({ url }) => {
     open(url);
   },
-  [messageTypes.process.minimize]: async () => {
+
+  [messageTypes.process.minimize]: () => {
     BrowserWindow.getFocusedWindow().minimize();
   },
-  [messageTypes.process.maximize]: async () => {
+
+  [messageTypes.process.maximize]: () => {
     const win = BrowserWindow.getFocusedWindow();
     if (win.isMaximized()) win.unmaximize();
     else win.maximize();
   },
-  [messageTypes.process.exit]: async () => {
-    process.exit();
-  },
-  [messageTypes.process.getPlatform]: () => process.platform
+
+  [messageTypes.process.exit]: process.exit,
+
+  [messageTypes.process.getPlatform]: () => process.platform,
+
+  [messageTypes.process.getVersion]: () => app.getVersion()
 };

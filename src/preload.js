@@ -7,7 +7,8 @@ contextBridge.exposeInMainWorld('process', {
   minimize: () => ipcRenderer.invoke('process', { type: process.minimize }),
   maximize: () => ipcRenderer.invoke('process', { type: process.maximize }),
   exit: () => ipcRenderer.invoke('process', { type: process.exit }),
-  getPlatform: () => ipcRenderer.invoke('process', { type: process.getPlatform })
+  getPlatform: () => ipcRenderer.invoke('process', { type: process.getPlatform }),
+  getVersion: () => ipcRenderer.invoke('process', { type: process.getVersion })
 });
 
 contextBridge.exposeInMainWorld('file', {

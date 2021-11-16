@@ -23,11 +23,19 @@
 
       </v-list-item-group>
     </v-list>
+    <div class="overline version-text"><span class="text-lowercase">v</span> {{ version }}</div>
   </v-navigation-drawer>
 </template>
 
 <script>
+import { process } from '@/api';
+
 export default {
+  data () {
+    return {
+      version: ''
+    };
+  },
   computed: {
     navItems () {
       return [
@@ -50,6 +58,19 @@ export default {
         }
       ];
     }
+  },
+  async created () {
+    this.version = await process.getVersion();
   }
 }
 </script>
+
+<style lang="scss">
+.version-text {
+  bottom: 0;
+  opacity: 0.3;
+  position: absolute;
+  text-align: center;
+  width: 100%;
+}
+</style>

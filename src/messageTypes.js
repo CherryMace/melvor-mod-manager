@@ -5,6 +5,7 @@ export const process = {
   maximize: 'maximize',
   exit: 'exit',
   getPlatform: 'get-platform',
+  getVersion: 'get-version'
 };
 
 export const file = {
