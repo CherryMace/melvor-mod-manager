@@ -28,7 +28,7 @@
         Update
         <v-icon small>arrow_upward</v-icon>
       </v-btn>
-      <v-btn v-else color="lime darken-2" :small="!featured" :disabled="disabled || installedMod" :loading="installing" @click="install">
+      <v-btn v-else color="lime darken-2" :small="!featured" :disabled="disabled || !!installedMod" :loading="installing" @click="install">
         {{ installedMod ? 'Installed' : 'Install' }}
         <v-icon small>{{ installedMod ? 'done' : 'add' }}</v-icon>
       </v-btn>
