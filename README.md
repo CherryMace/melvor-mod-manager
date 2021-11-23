@@ -39,7 +39,7 @@ You can adjust the load order of the mods using the arrows on the right-hand sid
 ## Steps for Compiling M3 Yourself
 For now, in order to use M3 on MacOS or Linux, you must build the application yourself. You may also choose to do this on Windows.
 1. Download and install [Node.js](https://nodejs.org/en/)
-2. Download the M3 source code from the [latest release](https://github.com/CherryMace/melvor-mod-manager/releases/tag/v0.3.6) and unzip it.
+2. Download the M3 source code from the [latest release](https://github.com/CherryMace/melvor-mod-manager/releases/latest) and unzip it.
 3. Open the directory in your choice of terminal/command prompt.
 4. Install dependencies using `npm install`. This may take several minutes.
 5. Package into an executable using `npm run electron:build`.
