@@ -12,6 +12,7 @@ Download and run the setup .exe from the [Latest Release](https://github.com/Cha
 
 Once installed and launched:
 1. Click the 'Browse' button and find your Melvor Idle installation directory. It is most likely something like: `C:\Program Files (x86)\Steam\steamapps\common\Melvor Idle`
+    * *Note: On MacOS, you may need to make sure your Library directory is visible in the Finder.*
 2. Add popular mods from the curated **Discover** tab. Simply find the mod you want and click **Install**!
 3. Alternatively, you can click the **Add +** button and manually add a mod from either a file or a web URL.
 4. Launch the game using the button in the upper-right and your mods should be loaded upon selecting your character.
