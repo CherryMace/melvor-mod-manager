@@ -435,7 +435,10 @@ window.addEventListener('load', () => {
       try {
         const content = fs.readFileSync(filePath, 'utf8');
         const scriptEl = document.createElement('script');
-        scriptEl.innerHTML = \`(() => { \${content} })();\`;
+        scriptEl.innerHTML = 
+        \`(() => {
+          \${content}
+        })();\`;
         document.body.appendChild(scriptEl);
       } catch {}
     }
