@@ -5,6 +5,9 @@ module.exports = {
       builderOptions: {
         appId: "com.cherrymace.m3",
         productName: "Melvor Mod Manager",
+        linux: {
+          category: "Game"
+        },
         copyright: "Copyright © 2021 ${author}",
         icon: "build/m3-icon.png",
         publish: ['github']

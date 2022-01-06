@@ -9,7 +9,8 @@
           </v-col>
         </v-row>
         <div v-show="error" class="red--text">{{ error }}</div>
-        <div>Currently only GreasyFork URLs are accepted. Example: <pre>https://greasyfork.org/en/scripts/script-id-and-name</pre></div>
+        <div>GreasyFork URLs are accepted. Example: <pre>https://greasyfork.org/en/scripts/script-id-and-name</pre></div>
+        <div>Github repositories are also accepted. Example: <pre>https://github.com/user/repository.git</pre></div>
       </v-container>
     </v-card-text>
     <v-card-actions>
@@ -22,7 +23,7 @@
 
 <script>
 import { mods } from '@/api';
-import { isGreasyForkUrl } from '@/util';
+import { isGreasyForkUrl, isGitUrl } from '@/util';
 
 export default {
   props: ['promptMoreInfo', 'isOpen', 'close'],
@@ -35,7 +36,7 @@ export default {
   },
   computed: {
     validUrl () {
-      return isGreasyForkUrl(this.url);
+      return (isGreasyForkUrl(this.url) || isGitUrl(this.url));
     }
   },
   methods: {
@@ -46,24 +47,36 @@ export default {
         return;
       }
       this.loading = true;
-      const res = await mods.parseWeb(this.url);
-      if (res.error) {
+      let res;
+      if (isGreasyForkUrl(this.url)) {
+        res = await mods.parseWeb(this.url);
+        if (res.manifest.name) {
+          const mod = await mods.add(this.$store.state.packageDir, this.url, res.manifest, res.content);
+          if (mod.error) {
+            this.error = mod.error;
+            this.loading = false;
+            return;
+          }
+          await this.$store.dispatch('loadMod', mod.id);
+        } else {
+          this.promptMoreInfo(res.manifest, this.url, res.content);
+        }
+        this.closeDialog();
+      } else if (isGitUrl(this.url)) {
+        res = await mods.cloneGit(this.url, this.$store.state.packageDir);
+        if (res.error) {
+          this.error = res.error;
+          this.loading = false;
+          return;
+        }
+        await this.$store.dispatch('loadMod', res.id);
+        this.closeDialog();
+      }
+      if (res.error) { 
         this.error = res.error;
         this.loading = false;
         return;
       }
-      if (res.manifest.name) {
-        const mod = await mods.add(this.$store.state.packageDir, this.url, res.manifest, res.content);
-        if (mod.error) {
-          this.error = mod.error;
-          this.loading = false;
-          return;
-        }
-        await this.$store.dispatch('loadMod', mod.id);
-      } else {
-        this.promptMoreInfo(res.manifest, this.url, res.content);
-      }
-      this.closeDialog();
     },
     resetDialog () {
       this.url = '';

@@ -49,7 +49,9 @@ async function createWindow() {
     // Load the index.html when not in development
     win.removeMenu();
     win.loadURL('app://./index.html');
-    autoUpdater.checkForUpdatesAndNotify();
+    if (process.platform == "windows") {
+	  autoUpdater.checkForUpdatesAndNotify();
+    }
   }
 }
 
