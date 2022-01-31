@@ -32,7 +32,7 @@ const handlers = {
 
   [mods.parseWeb]: async ({ origin, fromBrowser }) => {
     try {
-      console.log("Parsing web...");
+      console.log('Parsing web...');
       ppJson({origin, fromBrowser});
       if (!isWebOrigin(origin) || (!fromBrowser && !isGreasyForkUrl(origin)))
         return { error: 'Only web scripts from GreasyFork are currently supported.' };
@@ -49,16 +49,16 @@ const handlers = {
     }
   },
 
-  [mods.cloneGit]: async ({ origin, fromBrowser, packageDir }) => {
+  [mods.cloneGit]: async ({ origin, packageDir }) => {
     try {
-      console.log("Cloning git repository...");
-      ppJson({origin, fromBrowser, packageDir});
-      if (!fromBrowser && !isGitUrl(origin)) {
-        ppJson( { origin: origin, fromBrowser: fromBrowser, isURL:isGitUrl(origin) });
+      console.log('Cloning git repository...');
+      ppJson({origin, packageDir});
+      if (!isGitUrl(origin)) {
+        ppJson({ origin: origin, isURL: isGitUrl(origin) });
         return { error: 'Only github repositories are currently supported.' };
       }
 
-      const gitScript = await downloadGitRepository(origin, packageDir=packageDir);
+      const gitScript = await downloadGitRepository(origin, packageDir);
       if (gitScript.error) return { error: gitScript.error };
       const manifestContent = await readFile(gitScript.manifestPath, 'utf8');
       const parsedManifest = await parseManifest(manifestContent);
@@ -73,19 +73,19 @@ const handlers = {
       return res;
     } catch (e) {
       console.error(e);
-      return { error: "Unable to clone repository" };
+      return { error: 'Unable to clone repository' };
     }
   },
 
   [mods.browserInstall]: async ({ packageDir, data }) => {
-    console.log("Installing from browser...");
+    console.log('Installing from browser...');
     ppJson({packageDir, data});
     let res;
 
     if (data.type === 'script') {
       const { manifest, content } = await handlers[mods.parseWeb]({ origin: data.download, fromBrowser: true });
       const browserManifest = { ...manifest, name: data.title, origin: 'browser', browserId: data.id };
-      res = await handlers[mods.add]({ packageDir, origin: data.url, manifest: browserManifest, content: content });
+      res = await handlers[mods.add]({ packageDir, origin: data.url, manifest: browserManifest, content: content, fromBrowser: true });
     } else {
       const tempPath = path.join(app.getPath('temp'), 'M3');
       await ensureDir(tempPath);
@@ -103,11 +103,11 @@ const handlers = {
     return res;
   },
 
-  [mods.add]: async ({ packageDir, origin, manifest, content }) => {
+  [mods.add]: async ({ packageDir, origin, manifest, content, fromBrowser }) => {
     try {
-      console.log("Adding mod...");
-      ppJson({ packageDir, origin, manifest, content});
-      if (isGitUrl(origin)) {
+      console.log('Adding mod...');
+      ppJson({ packageDir, origin, manifest, content });
+      if (!fromBrowser && isGitUrl(origin)) {
         return manifest;
       }
       const id = manifest.id ? manifest.id : generateId(manifest.name); // note that git repositories require id to be $owner_$reponame
@@ -120,7 +120,7 @@ const handlers = {
 
       const modPath = getModPath(packageDir, manifest.id);
       await ensureDir(modPath);
-      console.log("Using modPath:", modPath);
+      console.log('Using modPath:', modPath);
 
       if (content) {
         await writeFile(path.join(modPath, manifest.entryScripts[0]), content);
@@ -129,9 +129,6 @@ const handlers = {
           await writeFile(path.join(modPath, manifest.entryScripts[0]), await downloadScript(origin));
         } else if (path.extname(origin) === '.js') {
           await copy(origin, path.join(modPath, manifest.entryScripts[0]));
-        } else if (isGitUrl(origin)) {
-          // Doing nothing, git repositories come with their own manifest files
-          return manifest;
         } else {
           await copy(path.dirname(origin), modPath);
           await injectModId(modPath, manifest.id);
@@ -150,7 +147,7 @@ const handlers = {
 
   [mods.loadAll]: async ({ packageDir }) => {
     try {
-      console.log("Loading all mods...");
+      console.log('Loading all mods...');
       ppJson({packageDir});
       const modPath = getModPath(packageDir);
       if (!await pathExists(modPath)) return [];
@@ -179,7 +176,7 @@ const handlers = {
   },
 
   [mods.load]: async ({ packageDir, id }) => {
-    console.log("Loading mod...");
+    console.log('Loading mod...');
     ppJson({packageDir, id});
     try {
       const modPath = getModPath(packageDir, id);
@@ -193,7 +190,7 @@ const handlers = {
 
   [mods.checkForUpdates]: async ({ mod }) => {
     try {
-      console.log("Checking for updates...");
+      console.log('Checking for updates...');
       ppJson({mod});
       return await getUpdates(mod);
     } catch (e) {
@@ -204,7 +201,7 @@ const handlers = {
 
   [mods.update]: async ({ packageDir, id, browserData }) => {
     try {
-      console.log("Updating mod...");
+      console.log('Updating mod...');
       ppJson({packageDir, id, browserData});
       const modPath = getModPath(packageDir, id);
       const manifestPath = path.join(modPath, 'manifest.json');
@@ -225,7 +222,7 @@ const handlers = {
   [mods.remove]: async ({ packageDir, id }) => {
     try {
       if (!id) return;
-      console.log("Removing mod...");
+      console.log('Removing mod...');
       ppJson({packageDir, id});
       const modPath = getModPath(packageDir, id);
 
@@ -237,7 +234,7 @@ const handlers = {
   },
 
   [mods.inject]: async ({ packageDir, mods }) => {
-    console.log("Injecting mods...");
+    console.log('Injecting mods...');
     ppJson({packageDir, mods});
     const m3jsPath = path.join(packageDir, 'm3.js');
     const m3js = buildM3Js(mods);
@@ -251,7 +248,7 @@ const handlers = {
 };
 
 const parseScript = async (scriptFile, content) => {
-  console.log("Parsing script...");
+  console.log('Parsing script...');
   ppJson({scriptFile});
   const userScript = usp(content);
 
@@ -270,7 +267,7 @@ const parseScript = async (scriptFile, content) => {
 };
 
 const parseManifest = async (content) => {
-  console.log("Parsing manifest...");
+  console.log('Parsing manifest...');
   ppJson({content});
   const manifest = JSON.parse(content);
 
@@ -289,7 +286,7 @@ const parseManifest = async (content) => {
 };
 
 const findManifest = async (dir) => {
-  console.log("Looking for manifest...");
+  console.log('Looking for manifest...');
   ppJson({dir});
   const files = await readdir(dir, { withFileTypes: true });
   const manifest = files.find(file => file.isFile() && file.name === 'manifest.json');
@@ -337,14 +334,15 @@ const isWebOrigin = origin => {
   }
 };
 
-const downloadScript = async (url, packageDir=undefined, update=false) => {
+const downloadScript = async (url, packageDir) => {
   if (isGreasyForkUrl(url)) {
     return await downloadGreasyForkScript(url);
-  } else if (isGitUrl(url)) {
-    return await downloadGitRepository(url, packageDir=packageDir);
+  }
+  if (isGitUrl(url)) {
+    return await downloadGitRepository(url, packageDir);
   }
 
-  console.log("Downloading file...");
+  console.log('Downloading file...');
   const scriptPath = url.split('/');
   const scriptFile = decodeURI(scriptPath[scriptPath.length - 1]);
   const { data } = await axios.get(url);
@@ -353,7 +351,7 @@ const downloadScript = async (url, packageDir=undefined, update=false) => {
 
 const downloadGreasyForkScript = async url => {
   try {
-    console.log("Downloading Greasyfork script...", JSON.stringify({url}, null, 2));
+    console.log('Downloading Greasyfork script...', JSON.stringify({ url }, null, 2));
     const scriptHomepage = await axios.get(url);
     const $ = cheerio.load(scriptHomepage.data);
     const scriptUrl = $('#install-area .install-link').attr('href');
@@ -366,38 +364,38 @@ const downloadGreasyForkScript = async url => {
     return;
   }
 };
-const downloadGitRepository = async (url, packageDir, modPath=undefined) => {
+const downloadGitRepository = async (url, packageDir, modPath) => {
   try {
-    console.log("Downloading git script...");
+    console.log('Downloading git script...');
     ppJson({url, packageDir, modPath});
     
-    const git = simpleGit().env("GIT_TERMINAL_PROMPT", "0");
+    const git = simpleGit().env('GIT_TERMINAL_PROMPT', '0');
     let scriptPath;
-    if (url.startsWith("git@")) {
-      scriptPath = url.split(":")[1];
-      scriptPath = scriptPath.split("/");
+    if (url.startsWith('git@')) {
+      scriptPath = url.split(':')[1];
+      scriptPath = scriptPath.split('/');
     } else {
-      scriptPath = url.split("/");
+      scriptPath = url.split('/');
     }
     const repoOwner = scriptPath[scriptPath.length-2];
     const repoName = scriptPath[scriptPath.length-1].replace(/^.git$/, '');
-    modPath = modPath? modPath : getModPath(packageDir, repoOwner+"_"+repoName);
+    modPath = modPath ? modPath : getModPath(packageDir, repoOwner + '_' + repoName);
     ppJson({url, packageDir, modPath, repoOwner, repoName});
 
 
     if ((modPath === undefined) || (repoName === undefined))
-      console.log("Invalid url");
+      console.log('Invalid url');
 
     try {
       await git.clone(url, modPath);
     } catch (e) {
-      return { error: "Couldn't clone the repository. Are you sure it exists?" };
+      return { error: 'Couldn\'t clone the repository. Are you sure it exists?' };
     }
     return {
       name: repoName,
       author: repoOwner,
       origin: url,
-      manifestPath: path.join(modPath, "manifest.json")
+      manifestPath: path.join(modPath, 'manifest.json')
     }
   } catch (e) {
     console.error(e);
@@ -447,10 +445,8 @@ const getGreasyForkUpdates = async mod => {
 }
 
 const updateScript = async (modPath, manifestPath, manifest, browserData) => {
-  const { content: updatedScript } = await downloadScript(
-    manifest.origin === 'browser' ? browserData.download : manifest.origin,
-    update=true
-  );
+  const url = manifest.origin === 'browser' ? browserData.download : manifest.origin;
+  const { content: updatedScript } = await downloadScript(url);
 
   if (!updatedScript) return;
 

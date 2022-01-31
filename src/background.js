@@ -30,7 +30,7 @@ async function createWindow() {
     height: mainWindowState.height,
     frame: false,
     webPreferences: {
-      preload: path.join(__dirname, "preload.js"),
+      preload: path.join(__dirname, 'preload.js'),
       // Use pluginOptions.nodeIntegration, leave this alone
       // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
       nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
@@ -49,9 +49,8 @@ async function createWindow() {
     // Load the index.html when not in development
     win.removeMenu();
     win.loadURL('app://./index.html');
-    if (process.platform == "windows") {
-	  autoUpdater.checkForUpdatesAndNotify();
-    }
+    if (process.platform === 'windows')
+      autoUpdater.checkForUpdatesAndNotify();
   }
 }
 

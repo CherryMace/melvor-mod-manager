@@ -26,7 +26,7 @@ contextBridge.exposeInMainWorld('mods', {
   // Returns mod manifest
   parseWeb: async (url) => await ipcRenderer.invoke('mods', { type: mods.parseWeb, origin: url }),
   // Returns mod manifest
-  cloneGit: async (url, packageDir) => await ipcRenderer.invoke('mods', { type: mods.cloneGit, origin: url, fromBrowser: false, packageDir }),
+  cloneGit: async (url, packageDir) => await ipcRenderer.invoke('mods', { type: mods.cloneGit, origin: url, packageDir }),
   // Returns mod manifest
   browserInstall: async (packageDir, data) => await ipcRenderer.invoke('mods', { type: mods.browserInstall, packageDir, data }),
   // Returns error

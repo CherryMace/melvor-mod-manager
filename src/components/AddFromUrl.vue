@@ -36,7 +36,7 @@ export default {
   },
   computed: {
     validUrl () {
-      return (isGreasyForkUrl(this.url) || isGitUrl(this.url));
+      return isGreasyForkUrl(this.url) || isGitUrl(this.url);
     }
   },
   methods: {

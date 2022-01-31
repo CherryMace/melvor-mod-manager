@@ -204,6 +204,7 @@ export default new Vuex.Store({
 
       if (mod.origin === 'browser') {
         const browserMod = state.browserMods.find(m => m.id === mod.browserId);
+        if (!browserMod) return; // Mod has been removed from Discover
         if (browserMod.version !== mod.version)
           updateAvailable = browserMod.version;
       }

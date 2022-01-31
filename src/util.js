@@ -18,12 +18,13 @@ export const sortModsByLoadOrder = (mods, modLoadOrder) => {
 export const isGreasyForkUrl = url => {
   return (/^https?:\/\/(www\.)?greasyfork\.org/).test(url);
 };
+
 export const isGitUrl = url => {
   // should add support for all git urls, not only github; but i'm not 100% sure about the proper url syntax
   // ssh urls should be easier than http ones though
-  const https_git = /^(https:\/\/)?(www\.)?github.com?\/([^/]*)\/([^/]*)(.git)?$/;
-  const ssh_git = /^git@github.com:([^/]*)\/([^/]*)(.git)?$/;
-  return https_git.test(url) || ssh_git.test(url);
+  const httpsGit = /^(https:\/\/)?(www\.)?github.com?\/([^/]*)\/([^/]*)(.git)?$/;
+  const sshGit = /^git@github.com:([^/]*)\/([^/]*)(.git)?$/;
+  return httpsGit.test(url) || sshGit.test(url);
 };
 
 export const getExecutableFilename = (platform) => ({
@@ -34,6 +35,6 @@ export const getExecutableFilename = (platform) => ({
 
 export const ppJson = obj => {
   if (obj !== null) {
-    console.dir(obj, {depth: null, colors: true});
+    console.dir(obj, { depth: null, colors: true });
   }
 }
