@@ -36,6 +36,7 @@ export default {
     source () {
       if (!this.mod.origin) return 'File';
       if (this.mod.origin === 'browser') return 'Discover';
+      if (this.mod.origin === 'git') return 'Git repo';
       if ((/^https?:\/\/(www\.)?greasyfork\.org/).test(this.mod.origin))
         return 'Greasy Fork';
       return 'Unknown';
