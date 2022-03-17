@@ -139,7 +139,7 @@ export default {
       await this.$store.dispatch('updateAllMods');
     },
     async update () {
-      await this.$store.dispatch('updateMod', this.selectedMod.id);
+      await this.$store.dispatch('updateMod', this.$store.state.packageDir, this.selectedMod.id);
     },
     async toggleDisabled () {
       await this.$store.dispatch('setModDisabledState', { id: this.selectedMod.id, disabled: !this.selectedMod.disabled });
