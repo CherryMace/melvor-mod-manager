@@ -74,7 +74,7 @@ export default {
     },
     async update () {
       this.installing = true;
-      await this.$store.dispatch('updateMod', this.installedMod.id);
+      await this.$store.dispatch('updateMod', this.$store.state.packageDir, this.installedMod.id);
       this.installing = false;
     }
   }
