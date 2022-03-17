@@ -6,9 +6,9 @@
     <v-tabs-items v-model="tab" class="px-2 transparent">
       <v-tab-item value="general">
         <v-form>
-          <v-checkbox v-model="checkForUpdates">
+          <v-checkbox v-model="shouldCheckForUpdates">
             <template v-slot:label>
-              <div>Automatically check for updates to mods
+              <div>Check for automatic updates to mods
                 <v-tooltip right max-width="350" color="#05090c">
                   <template v-slot:activator="{ attrs, on }">
                     <v-icon v-bind="attrs" v-on="on" color="grey darken-1">help_outline</v-icon>
@@ -16,6 +16,7 @@
                   <p class="mb-0">Only works for supported sources:</p>
                   <ul>
                     <li>GreasyFork</li>
+                    <li>Git repos</li>
                   </ul>
                 </v-tooltip>
               </div>
@@ -61,12 +62,12 @@ export default {
     };
   },
   computed: {
-    checkForUpdates: {
+    shouldCheckForUpdates: {
       get () {
-        return this.$store.state.checkForUpdates;
+        return this.$store.state.shouldCheckForUpdates;
       },
       set (value) {
-        this.$store.dispatch('changeSetting', { key: 'checkForUpdates', value });
+        this.$store.dispatch('changeSetting', { key: 'shouldCheckForUpdates', value });
       }
     },
     launchMode: {
