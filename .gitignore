@@ -24,5 +24,4 @@ pnpm-debug.log*
 
 #Electron-builder output
 /dist_electronpackage-lock.json
-package-lock.json
 dist_electron/
