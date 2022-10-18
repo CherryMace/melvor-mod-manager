@@ -512,6 +512,7 @@ const injectModId = async (dir, modId) => {
 }
 
 const buildM3Js = (mods) => {
+  mods = [];
   const modInjectables = [];
   for (const mod of mods) {
     if (mod.disabled) continue;
@@ -524,6 +525,9 @@ const buildM3Js = (mods) => {
   return `
 window.addEventListener('load', () => {
   if (!document.getElementById('m-page-loader')) return;
+
+  SwalLocale.fire('Uninstall Melvor Mod Manager (M3) and use the in-game Mod Manager instead!');
+  return;
 
   const fs = require('fs');
   const path = require('path');

@@ -127,10 +127,11 @@ export default new Vuex.Store({
       commit('setGameVersion', res.data.version);
     },
     async loadBrowser ({ commit }) {
-      const res = await axios.get('https://cherrymace.github.io/m3-mod-browser/mods/all.json', {
-        params: { t: new Date().getTime() }
-      });
-      commit('setBrowserMods', res.data);
+      // const res = await axios.get('https://cherrymace.github.io/m3-mod-browser/mods/all.json', {
+      //   params: { t: new Date().getTime() }
+      // });
+      // commit('setBrowserMods', res.data);
+      commit('setBrowserMods', []);
     },
     loadModLoadOrder ({ commit }, modLoadOrder) {
       commit('setModLoadOrder', modLoadOrder);

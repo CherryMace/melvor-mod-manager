@@ -8,7 +8,7 @@
           :mod="mod"
           :loadOrder="i + 1"
           :loading="modBeingUpdated === mod.id"
-          :disabled="disabled || modBeingUpdated === mod.id"
+          :disabled="true || disabled || modBeingUpdated === mod.id"
           />
       </v-list-item-group>
     </v-list>

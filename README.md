@@ -1,3 +1,9 @@
+# This project is no longer supported. Thanks to everyone who used and enjoyed M3!
+
+## 🎉🎉🎉 Official mod support is out! Go use the in-game Mod Manager instead!
+
+-----
+
 ![M3 Logo](repo/m3-small.png)
 # Melvor Mod Manager (M3)
 Melvor Mod Manager (M3) allows you to quickly add userscripts and browser extensions as mods to the Steam edition of Melvor Idle.

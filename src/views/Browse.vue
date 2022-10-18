@@ -59,7 +59,8 @@ export default {
   },
   computed: {
     disabled () {
-      return !this.$store.state.isValidDir;
+      // return !this.$store.state.isValidDir;
+      return true;
     },
     mods () {
       return this.$store.state.browserMods;

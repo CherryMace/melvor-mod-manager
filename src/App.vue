@@ -4,6 +4,12 @@
     <toolbar />
     <sidebar />
     <v-main class="theme-color">
+      <div class="px-2">
+        <v-alert prominent type="warning" border="left">
+          <p>Official Mod Support is out! As a result, M3 is no longer supported and will no longer load mods to avoid breaking your game.</p>
+          <p>Thank you to everyone who used and enjoyed M3! Now go use my in-game Mod Manager instead :)</p>
+        </v-alert>
+      </div>
       <div class="d-flex flex-column fill-height">
         <v-container class="flex-column pa-0" fill-height fluid>
           <router-view />
